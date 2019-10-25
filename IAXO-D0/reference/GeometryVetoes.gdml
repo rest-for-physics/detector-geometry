@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<define>
+    <variable name="scintillatorThickness" value="50"/>
+    <variable name="scintillatorLongSide" value="750"/>
+    <variable name="scintillatorShortSide" value="200"/>
+    <variable name="scintillatorHoleDiameter" value="150"/>
+
+    <variable name="scintillatorLongSideNonSensitive" value="0.005*scintillatorLongSide"/>
+    <variable name="scintillatorShortSideNonSensitive" value="0.005*scintillatorShortSide"/>
+    <!-- TODO: explanation of "non sensitive" -->
+
+    <position name="scintillatorBoxSolidWithHoleRightHolePosition" x="scintillatorShortSide/2" y="0" z="0" unit="mm"/>
+    <position name="scintillatorBoxSolidWithHoleLeftHolePosition" x="-scintillatorShortSide/2" y="0" z="0" unit="mm"/>
+
+    <!-- actual scintillator positions in world-->
+    <variable name="vetoFrontPosX" value="0"/>
+    <variable name="vetoFrontPosY" value="0"/>
+    <variable name="vetoFrontPosZ" value="400"/>
+    <rotation name="vetoFrontRotation" unit="deg" x="0" y="0" z="0"/>
+
+    <variable name="vetoBackPosX" value="0"/>
+    <variable name="vetoBackPosY" value="0 - scintillatorThickness"/>
+    <variable name="vetoBackPosZ" value="-400"/>
+    <rotation name="vetoBackRotation" unit="deg" x="0" y="0" z="180"/>
+
+    <variable name="vetoBottomPosX" value="0"/>
+    <variable name="vetoBottomPosY" value="-400"/>
+    <variable name="vetoBottomPosZ" value="0 + scintillatorThickness"/>
+    <rotation name="vetoBottomRotation" unit="deg" x="90" y="0" z="0"/>
+
+    <variable name="vetoTopPosX" value="0"/>
+    <variable name="vetoTopPosY" value="400 - scintillatorThickness"/>
+    <variable name="vetoTopPosZ" value="0"/>
+    <rotation name="vetoTopRotation" unit="deg" x="90" y="0" z="0"/>
+
+    <variable name="vetoEastPosX" value="400 - scintillatorThickness"/>
+    <variable name="vetoEastPosY" value="0"/>
+    <variable name="vetoEastPosZ" value="0"/>
+    <rotation name="vetoEastRotation" unit="deg" x="90" y="90" z="0"/>
+
+    <variable name="vetoWestPosX" value="-400 + scintillatorThickness"/>
+    <variable name="vetoWestPosY" value="0"/>
+    <variable name="vetoWestPosZ" value="0"/>
+    <rotation name="vetoWestRotation" unit="deg" x="90" y="90" z="0"/>
+</define>
+
+<solids>
+    <box name="scintillatorBoxSolid" x="scintillatorShortSide-2*scintillatorShortSideNonSensitive" y="scintillatorLongSide-2*scintillatorLongSideNonSensitive" z="scintillatorThickness" lunit="mm" />
+    <tube name="photoMultiplierTube" z="scintillatorThickness" startphi="0" deltaphi="360" rmin="0" rmax="scintillatorThickness*0.4" aunit="deg" lunit="mm" />
+
+    <union name="scintillatorBoxSolid">
+        <first ref="scintillatorBoxSolid"/>
+        <second ref="photoMultiplierTube"/>
+        <rotation name="photoMultiplierTubeRotation" unit="deg" x="90" y="0" z="0"/>
+        <position name="photoMultiplierTubePosition" x="0" y="scintillatorLongSide/2 + scintillatorThickness/2 - scintillatorLongSideNonSensitive" z="0" unit="mm"/>
+    </union>
+
+    <tube name="scintillatorHoleCircular" x="scintillatorShortSide/2" y="scintillatorLongSide/2" z="scintillatorThickness*1.05" startphi="0" deltaphi="360" rmin="0" rmax="scintillatorHoleDiameter/2" aunit="deg" lunit="mm" />
+    <subtraction name="scintillatorBoxSolidWithRightHole">
+        <first ref="scintillatorBoxSolid"/>
+        <second ref="scintillatorHoleCircular"/>
+        <positionref ref="scintillatorBoxSolidWithHoleRightHolePosition"/>
+    </subtraction>
+    <subtraction name="scintillatorBoxSolidWithLeftHole">
+        <first ref="scintillatorBoxSolid"/>
+        <second ref="scintillatorHoleCircular"/>
+        <positionref ref="scintillatorBoxSolidWithHoleLeftHolePosition"/>
+    </subtraction>
+
+
+</solids>
+
+<structure>
+    <volume name="scintillatorVolume">
+        <materialref ref="BC408"/>
+        <solidref ref="scintillatorBoxSolid"/>
+    </volume>
+
+    <volume name="scintillatorVolumeWithRightHole">
+        <materialref ref="BC408"/>
+        <solidref ref="scintillatorBoxSolidWithRightHole"/>
+    </volume>
+
+    <volume name="scintillatorVolumeWithLeftHole">
+        <materialref ref="BC408"/>
+        <solidref ref="scintillatorBoxSolidWithLeftHole"/>
+    </volume>
+
+</structure>

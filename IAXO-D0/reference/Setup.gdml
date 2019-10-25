@@ -3,98 +3,305 @@
 <!DOCTYPE gdml [
 <!ENTITY materials SYSTEM "../materials.xml">
 <!ENTITY geometry_main SYSTEM "./GeometryMain.gdml">
+<!ENTITY geometry_vetoes SYSTEM "./GeometryVetoes.gdml">
 ]>
 
 <gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
 
-<define>
+    <define>
 
-    <!-- variables used for looping -->
-    <constant name="PI" value="3.14159265358979323846264" />
-    <constant name="degToRad" value="PI/180." />
+        <!-- variables used for looping -->
+        <constant name="PI" value="3.14159265358979323846264" />
+        <constant name="degToRad" value="PI/180." />
 
-    <!-- World -->
-    <constant name="world_size" value="1000"/> <!-- try to keep that small to avoid interactions inside -->
+        <!-- World -->
+        <constant name="world_size" value="1000"/>
+        <!-- try to keep that small to avoid interactions inside -->
 
-    <!-- Target gas -->
-    <variable name="target_pressure" value="1.4"/> <!-- bar -->
-    <variable name="target_temperature" value="300.0"/> <!-- K -->
-    <variable name="target_quencher" value="2"/> <!-- % -->
+        <!-- Target gas -->
+        <variable name="target_pressure" value="1.4"/>
+        <!-- pressure in bar -->
+        <variable name="target_temperature" value="300.0"/>
+        <!-- temperature in K -->
+        <variable name="target_quencher" value="2"/>
+        <!-- percentage of quencher gas in target gas (e.g. 2% -> 98%target + 2% quencher) -->
 
-    <!-- Chamber -->
-    <variable name="chamberLength" value="30"/>
-    <variable name="chamberRadius" value="50"/> 
-    <variable name="copperChamberThickness" value="18.5"/>
-    <variable name="teflonChamberThickness" value="2"/>
-    <variable name="copperChamberTopThickness" value="14"/>
+        <!-- Chamber -->
+        <variable name="chamberLength" value="30"/>
+        <variable name="chamberRadius" value="50"/>
+        <variable name="copperChamberThickness" value="18.5"/>
+        <variable name="teflonChamberThickness" value="2"/>
+        <variable name="copperChamberTopThickness" value="14"/>
 
-    <!-- Readout -->
+        <!-- Readout -->
+        <variable name="kaptonReadoutThickness" value="0.5"/>
+        <variable name="copperReadoutThickness" value="0.2"/>
+        <variable name="copperReadoutSide" value="60"/>
+        <position name="kaptonReadoutPosition" unit="mm" x="0" y="0" z="-chamberLength/2.-kaptonReadoutThickness/2."/>
+        <position name="copperReadoutPosition" unit="mm" x="0" y="0" z="-chamberLength/2.-kaptonReadoutThickness - copperReadoutThickness/2."/>
 
-    <variable name="kaptonReadoutThickness" value="0.5"/>
-    <variable name="copperReadoutThickness" value="0.2"/>
-    <variable name="copperReadoutSide" value="60"/>
-    <position name="kaptonReadoutPosition" unit="mm" x="0" y="0" z="-chamberLength/2.-kaptonReadoutThickness/2."/>
-    <position name="copperReadoutPosition" unit="mm" x="0" y="0" z="-chamberLength/2.-kaptonReadoutThickness - copperReadoutThickness/2."/>
+        <!-- Raquette -->
+        <variable name="raquetteThickness" value="15"/>
+        <variable name="raquetteLength" value="275.5"/>
+        <variable name="raquetteWidth" value="80"/>
+        <position name="raqueteUnion" unit="mm" x="-raquetteLength/2." y="0" z="0"/>
 
-    <!-- Raquette -->
-    <variable name="raquetteThickness" value="15"/>
-    <variable name="raquetteLength" value="275.5"/>
-    <variable name="raquetteWidth" value="80"/>
-    <position name="raqueteUnion" unit="mm" x="-raquetteLength/2." y="0" z="0"/>
+        <!-- Cathode -->
+        <variable name="cathodeThickness" value="15"/>
+        <variable name="cathodeHole" value="15"/>
+        <variable name="mylarThickness" value="0.004"/>
+        <variable name="copperCathodeThickness" value="15"/>
+        <position name="mylarCathodePosition" unit="mm" x="0" y="0" z="chamberLength/2.-mylarThickness/2."/>
 
-    <!-- Cathode -->
-    <variable name="cathodeThickness" value="15"/>
-    <variable name="cathodeHole" value="15"/>
-    <variable name="mylarThickness" value="0.004"/>
-    <variable name="copperCathodeThickness" value="15"/>
-    <position name="mylarCathodePosition" unit="mm" x="0" y="0" z="chamberLength/2.-mylarThickness/2."/>
+        <variable name="cathodePatternThickness" value="3"/>
+        <variable name="cathodePattern0Rad" value="4.25"/>
+        <variable name="cathodePattern0Width" value="0.3"/>
+        <variable name="cathodePattern1Rad" value="8.5"/>
+        <variable name="cathodePattern1Width" value="1"/>
+        <variable name="cathodePattern2Rad" value="12.5"/>
+        <variable name="cathodePattern2Width" value="2.5"/>
+        <variable name="cathodePattern2LineWidth" value="2"/>
 
-    <variable name="cathodePatternThickness" value="3"/>
-    <variable name="cathodePattern0Rad" value="4.25"/>
-    <variable name="cathodePattern0Width" value="0.3"/>
-    <variable name="cathodePattern1Rad" value="8.5"/>
-    <variable name="cathodePattern1Width" value="1"/>
-    <variable name="cathodePattern2Rad" value="12.5"/>
-    <variable name="cathodePattern2Width" value="2.5"/>
-    <variable name="cathodePattern2LineWidth" value="2"/>
+        <rotation name="rotation0" unit="deg" x="0" y="0" z="22.5"/>
+        <rotation name="rotation1" unit="deg" x="0" y="0" z="67.5"/>
+        <rotation name="rotation2" unit="deg" x="0" y="0" z="112.5"/>
+        <rotation name="rotation3" unit="deg" x="0" y="0" z="157.5"/>
+        <rotation name="copperReadoutRotation" unit="deg" x="0" y="0" z="45."/>
 
-    <rotation name="rotation0" unit="deg" x="0" y="0" z="22.5"/>
-    <rotation name="rotation1" unit="deg" x="0" y="0" z="67.5"/>
-    <rotation name="rotation2" unit="deg" x="0" y="0" z="112.5"/>
-    <rotation name="rotation3" unit="deg" x="0" y="0" z="157.5"/>
-    <rotation name="copperReadoutRotation" unit="deg" x="0" y="0" z="45."/>
+        <!-- Pipe -->
+        <variable name="teflonThickness" value="3"/>
+        <variable name="copperFlangeThickness" value="20"/>
+        <variable name="copperFlangeHole" value="12.5"/>
+        <variable name="copperTubeThickness" value="10"/>
+        <variable name="copperFlangeExtRad" value="57.5"/>
+        <variable name="pipeLength" value="400"/>
+        <variable name="pipeThickness" value="10"/>
+        <position name="teflonCover2Position" unit="mm" x="0" y="0" z="chamberLength/2.-teflonThickness/2."/>
+        <position name="pipePos0" unit="mm" x="0" y="0" z="-pipeLength/2.+copperFlangeThickness/2."/>
+        <position name="pipePos1" unit="mm" x="0" y="0" z="pipeLength/2.-copperFlangeThickness/2."/>
 
-    <!-- Pipe -->
-    <variable name="teflonThickness" value="3"/>
-    <variable name="copperFlangeThickness" value="20"/>
-    <variable name="copperFlangeHole" value="12.5"/>
-    <variable name="copperTubeThickness" value="10"/>
-    <variable name="copperFlangeExtRad" value="57.5"/>
-    <variable name="pipeLength" value="400"/>
-    <variable name="pipeThickness" value="10"/>
-    <position name="teflonCover2Position" unit="mm" x="0" y="0" z="chamberLength/2.-teflonThickness/2."/>
-    <position name="pipePos0" unit="mm" x="0" y="0" z="-pipeLength/2.+copperFlangeThickness/2."/>
-    <position name="pipePos1" unit="mm" x="0" y="0" z="pipeLength/2.-copperFlangeThickness/2."/>
+        <!-- Lead Shielding -->
+        <variable name="LeadBoxShift" value="25"/>
+        <variable name="LeadBoxSize" value="550"/>
+        <variable name="LeadHolePipeSize" value="50"/>
+        <variable name="LeadHoleDetectorSize" value="150"/>
+        <position name="LeadHolePipePos" unit="mm" x="0" y="0" z="LeadBoxSize/2."/>
+        <position name="LeadHoleRaquettePos" unit="mm" x="-(raquetteLength+10)/2." y="0" z="-chamberLength/2.-raquetteThickness/2.-LeadBoxShift"/>
 
-    <!-- Lead Shielding -->
-    <variable name="LeadBoxShift" value="25"/>
-    <variable name="LeadBoxSize" value="550"/>
-    <variable name="LeadHolePipeSize" value="50"/>
-    <variable name="LeadHoleDetectorSize" value="150"/>
-    <position name="LeadHolePipePos" unit="mm" x="0" y="0" z="LeadBoxSize/2."/>
-    <position name="LeadHoleRaquettePos" unit="mm" x="-(raquetteLength+10)/2." y="0" z="-chamberLength/2.-raquetteThickness/2.-LeadBoxShift"/>
-
-    <!-- Scintillators -->
-    <variable name="scintillatorVetoWidth" value="50"/>
-
-</define>
+    </define>
 
     &materials;
+    &geometry_vetoes;
     &geometry_main;
+
+                                                                                        <!-- Physical volume definition (volume and position assignment) ..............................-->
+    <volume name="World">
+        <materialref ref="Air"/>
+        <solidref ref="WorldSolid"/>
+
+        <physvol name="gas">
+            <volumeref ref="gasVolume"/>
+            <position name="gasPosition" unit="mm" x="0" y="0" z="0"/>
+        </physvol>
+
+        <physvol name="kapton4Readout">
+            <volumeref ref="kaptonReadoutVolume"/>
+            <positionref ref="kaptonReadoutPosition"/>
+        </physvol>
+
+        <physvol name="CuReadout">
+            <volumeref ref="copperReadoutVolume"/>
+            <positionref ref="copperReadoutPosition"/>
+            <rotationref ref="copperReadoutRotation"/>
+        </physvol>
+
+        <physvol name="CuRaquette">
+            <volumeref ref="raquetteVolume"/>
+            <position name="raquettePosition" unit="mm" x="0" y="0" z="-chamberLength/2.-raquetteThickness/2."/>
+        </physvol>
+
+        <physvol name="CuChamber">
+            <volumeref ref="copperChamberVolume"/>
+            <position name="copperChamberPosition" unit="mm" x="0" y="0" z="cathodeThickness/2."/>
+        </physvol>
+
+        <physvol name="PTFECoverChamber">
+            <volumeref ref="teflonCoverChamberVolume"/>
+            <position name="teflonCoverChamberPosition" unit="mm" x="0" y="0" z="copperCathodeThickness/2."/>
+        </physvol>
+
+        <physvol name="mylarCat">
+            <volumeref ref="mylarCathodeVolume"/>
+            <positionref ref="mylarCathodePosition" unit="mm" x="0" y="0" z="chamberLength/2.-mylarThickness/2."/>
+        </physvol>
+
+        <physvol name="CuCathode">
+            <volumeref ref="copperCathodeVolume"/>
+            <position name="copperCathodePosition" unit="mm" x="0" y="0" z="chamberLength/2.+copperCathodeThickness/2."/>
+        </physvol>
+
+        <physvol name="CuChamberTop">
+            <volumeref ref="copperChamberTopVolume"/>
+            <position name="copperChamberTopPosition" unit="mm" x="0" y="0" z="chamberLength/2.+copperCathodeThickness+copperChamberTopThickness/2."/>
+        </physvol>
+
+        <physvol name="CuPipe">
+            <volumeref ref="copperPipeVolume"/>
+            <position name="copperPipePosition" unit="mm" x="0" y="0" z="chamberLength/2.+copperCathodeThickness+copperChamberTopThickness+pipeLength/2."/>
+        </physvol>
+
+        <physvol name="PTFEPipe">
+            <volumeref ref="teflonPipeVolume"/>
+            <position name="teflonPipePosition" unit="mm" x="0" y="0" z="chamberLength/2.+copperCathodeThickness+copperChamberTopThickness+pipeLength/2."/>
+        </physvol>
+
+        <physvol name="PTFECoverCathode">
+            <volumeref ref="teflonCoverCathodeVolume"/>
+            <position name="teflonCoverCathodePosition" unit="mm" x="0" y="0" z="chamberLength/2.+ cathodePatternThickness/2.+copperCathodeThickness/2.+copperChamberTopThickness/2."/>
+        </physvol>
+
+        <physvol name="VacPipe">
+            <volumeref ref="VacuumPipeVolume"/>
+            <position name="VacuumPipePosition" unit="mm" x="0" y="0" z="chamberLength/2.+ cathodePatternThickness/2.+copperCathodeThickness/2.+copperChamberTopThickness/2.+pipeLength/2."/>
+        </physvol>
+
+        <physvol name="CuCathodePattern">
+            <volumeref ref="cathodePatternVolume"/>
+            <position name="cathodePatternPosition" unit="mm" x="0" y="0" z="chamberLength/2.+cathodePatternThickness/2."/>
+        </physvol>
+
+        <physvol name="VacCathodePattern">
+            <volumeref ref="vacuumCathodePatternVolume"/>
+            <position name="vacuumCathodePatternPosition" unit="mm" x="0" y="0" z="chamberLength/2.+cathodePatternThickness/2."/>
+        </physvol>
+
+        <physvol name="LeadShielding">
+            <volumeref ref="LeadBoxVolume"/>
+            <position name="LeadBoxPosition" unit="mm" x="0" y="0" z="LeadBoxShift"/>
+        </physvol>
+
+        <!-- BEGIN veto front-->
+        <physvol name="vetoFront1of4">
+            <volumeref ref="scintillatorVolume"/>
+            <position name="vetoFront1of4Position" unit="mm" x="vetoFrontPosX - 1.5*scintillatorShortSide" y="vetoFrontPosY" z="vetoFrontPosZ"/>
+            <rotationref ref="vetoFrontRotation"/>
+        </physvol>
+        <physvol name="vetoFront2of4">
+            <volumeref ref="scintillatorVolumeWithRightHole"/>
+            <position name="vetoFront2of4Position" unit="mm" x="vetoFrontPosX - 0.5*scintillatorShortSide" y="vetoFrontPosY" z="vetoFrontPosZ"/>
+            <rotationref ref="vetoFrontRotation"/>
+        </physvol>
+        <physvol name="vetoFront3of4">
+            <volumeref ref="scintillatorVolumeWithLeftHole"/>
+            <position name="vetoFront3of4Position" unit="mm" x="vetoFrontPosX + 0.5*scintillatorShortSide" y="vetoFrontPosY" z="vetoFrontPosZ"/>
+            <rotationref ref="vetoFrontRotation"/>
+        </physvol>
+        <physvol name="vetoFront4of4">
+            <volumeref ref="scintillatorVolume"/>
+            <position name="vetoFront4of4Position" unit="mm" x="vetoFrontPosX + 1.5*scintillatorShortSide" y="vetoFrontPosY" z="vetoFrontPosZ"/>
+            <rotationref ref="vetoFrontRotation"/>
+        </physvol>
+        <!-- END veto front-->
+
+        <!-- BEGIN veto back-->
+        <physvol name="vetoBack1of3">
+            <volumeref ref="scintillatorVolume"/>
+            <position name="vetoBack1of3Position" unit="mm" x="vetoBackPosX - 1*scintillatorShortSide" y="vetoBackPosY" z="vetoBackPosZ"/>
+            <rotationref ref="vetoBackRotation"/>
+        </physvol>
+        <physvol name="vetoBack2of3">
+            <volumeref ref="scintillatorVolume"/>
+            <position name="vetoBack2of3Position" unit="mm" x="vetoBackPosX - 0*scintillatorShortSide" y="vetoBackPosY" z="vetoBackPosZ"/>
+            <rotationref ref="vetoBackRotation"/>
+        </physvol>
+        <physvol name="vetoBack3of3">
+            <volumeref ref="scintillatorVolume"/>
+            <position name="vetoBack3of3Position" unit="mm" x="vetoBackPosX + 1*scintillatorShortSide" y="vetoBackPosY" z="vetoBackPosZ"/>
+            <rotationref ref="vetoBackRotation"/>
+        </physvol>
+        <!-- END veto back-->
+
+        <!-- BEGIN veto top-->
+        <physvol name="vetoTop1of4">
+            <volumeref ref="scintillatorVolume"/>
+            <position name="vetoTop1of4Position" unit="mm" x="vetoTopPosX - 1.5*scintillatorShortSide" y="vetoTopPosY" z="vetoTopPosZ"/>
+            <rotationref ref="vetoTopRotation"/>
+        </physvol>
+        <physvol name="vetoTop2of4">
+            <volumeref ref="scintillatorVolume"/>
+            <position name="vetoTop2of4Position" unit="mm" x="vetoTopPosX - 0.5*scintillatorShortSide" y="vetoTopPosY" z="vetoTopPosZ"/>
+            <rotationref ref="vetoTopRotation"/>
+        </physvol>
+        <physvol name="vetoTop3of4">
+            <volumeref ref="scintillatorVolume"/>
+            <position name="vetoTop3of4Position" unit="mm" x="vetoTopPosX + 0.5*scintillatorShortSide" y="vetoTopPosY" z="vetoTopPosZ"/>
+            <rotationref ref="vetoTopRotation"/>
+        </physvol>
+        <physvol name="vetoTop4of4">
+            <volumeref ref="scintillatorVolume"/>
+            <position name="vetoTop4of4Position" unit="mm" x="vetoTopPosX + 1.5*scintillatorShortSide" y="vetoTopPosY" z="vetoTopPosZ"/>
+            <rotationref ref="vetoTopRotation"/>
+        </physvol>
+        <!-- END veto top-->
+
+        <!-- BEGIN veto bottom-->
+        <physvol name="vetoBottom1of3">
+            <volumeref ref="scintillatorVolume"/>
+            <position name="vetoBottom1of3Position" unit="mm" x="vetoBottomPosX - 1*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ"/>
+            <rotationref ref="vetoBottomRotation"/>
+        </physvol>
+        <physvol name="vetoBottom2of3">
+            <volumeref ref="scintillatorVolume"/>
+            <position name="vetoBottom2of3Position" unit="mm" x="vetoBottomPosX + 0*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ"/>
+            <rotationref ref="vetoBottomRotation"/>
+        </physvol>
+        <physvol name="vetoBottom3of3">
+            <volumeref ref="scintillatorVolume"/>
+            <position name="vetoBottom3of3Position" unit="mm" x="vetoBottomPosX + 1*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ"/>
+            <rotationref ref="vetoBottomRotation"/>
+        </physvol>
+        <!-- END veto bottom-->
+
+        <!-- BEGIN veto east-->
+        <physvol name="vetoEast1of3">
+            <volumeref ref="scintillatorVolume"/>
+            <position name="vetoEast1of3Position" unit="mm" x="vetoEastPosX" y="vetoEastPosY - 1*scintillatorShortSide" z="vetoEastPosZ"/>
+            <rotationref ref="vetoEastRotation"/>
+        </physvol>
+        <physvol name="vetoEast2of3">
+            <volumeref ref="scintillatorVolume"/>
+            <position name="vetoEast2of3Position" unit="mm" x="vetoEastPosX" y="vetoEastPosY + 0*scintillatorShortSide" z="vetoEastPosZ"/>
+            <rotationref ref="vetoEastRotation"/>
+        </physvol>
+        <physvol name="vetoEast3of3">
+            <volumeref ref="scintillatorVolume"/>
+            <position name="vetoEast3of3Position" unit="mm" x="vetoEastPosX" y="vetoEastPosY  + 1*scintillatorShortSide" z="vetoEastPosZ"/>
+            <rotationref ref="vetoEastRotation"/>
+        </physvol>
+        <!-- END veto east-->
+
+        <!-- BEGIN veto west-->
+        <physvol name="vetoWest1of3">
+            <volumeref ref="scintillatorVolume"/>
+            <position name="vetoWest1of3Position" unit="mm" x="vetoWestPosX" y="vetoWestPosY - 1*scintillatorShortSide" z="vetoWestPosZ"/>
+            <rotationref ref="vetoWestRotation"/>
+        </physvol>
+        <physvol name="vetoWest2of3">
+            <volumeref ref="scintillatorVolume"/>
+            <position name="vetoWest2of3Position" unit="mm" x="vetoWestPosX" y="vetoWestPosY + 0*scintillatorShortSide" z="vetoWestPosZ"/>
+            <rotationref ref="vetoWestRotation"/>
+        </physvol>
+        <physvol name="vetoWest3of3">
+            <volumeref ref="scintillatorVolume"/>
+            <position name="vetoWest3of3Position" unit="mm" x="vetoWestPosX" y="vetoWestPosY  + 1*scintillatorShortSide" z="vetoWestPosZ"/>
+            <rotationref ref="vetoWestRotation"/>
+        </physvol>
+        <!-- END veto west-->
+    </volume>
 
     <setup name="Default" version="1.0">
         <world ref="World"/>
-        
+
     </setup>
 
 </gdml>
