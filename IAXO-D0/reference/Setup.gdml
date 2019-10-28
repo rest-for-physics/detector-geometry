@@ -94,7 +94,7 @@
     &geometry_vetoes;
     &geometry_main;
 
-                                                                                        <!-- Physical volume definition (volume and position assignment) ..............................-->
+                                                                                                    <!-- Physical volume definition (volume and position assignment) ..............................-->
     <volume name="World">
         <materialref ref="Air"/>
         <solidref ref="WorldSolid"/>
@@ -206,17 +206,17 @@
         <!-- BEGIN veto back-->
         <physvol name="vetoBack1of3">
             <volumeref ref="scintillatorVolume"/>
-            <position name="vetoBack1of3Position" unit="mm" x="vetoBackPosX - 1*scintillatorShortSide" y="vetoBackPosY" z="vetoBackPosZ"/>
+            <position name="vetoBack1of3Position" unit="mm" x="vetoBackPosX" y="vetoBackPosY - 1*scintillatorShortSide" z="vetoBackPosZ"/>
             <rotationref ref="vetoBackRotation"/>
         </physvol>
         <physvol name="vetoBack2of3">
             <volumeref ref="scintillatorVolume"/>
-            <position name="vetoBack2of3Position" unit="mm" x="vetoBackPosX - 0*scintillatorShortSide" y="vetoBackPosY" z="vetoBackPosZ"/>
+            <position name="vetoBack2of3Position" unit="mm" x="vetoBackPosX" y="vetoBackPosY - 0*scintillatorShortSide" z="vetoBackPosZ"/>
             <rotationref ref="vetoBackRotation"/>
         </physvol>
         <physvol name="vetoBack3of3">
             <volumeref ref="scintillatorVolume"/>
-            <position name="vetoBack3of3Position" unit="mm" x="vetoBackPosX + 1*scintillatorShortSide" y="vetoBackPosY" z="vetoBackPosZ"/>
+            <position name="vetoBack3of3Position" unit="mm" x="vetoBackPosX" y="vetoBackPosY + 1*scintillatorShortSide" z="vetoBackPosZ"/>
             <rotationref ref="vetoBackRotation"/>
         </physvol>
         <!-- END veto back-->
@@ -245,19 +245,24 @@
         <!-- END veto top-->
 
         <!-- BEGIN veto bottom-->
-        <physvol name="vetoBottom1of3">
+        <physvol name="vetoBottom1of4">
             <volumeref ref="scintillatorVolume"/>
-            <position name="vetoBottom1of3Position" unit="mm" x="vetoBottomPosX - 1*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ"/>
+            <position name="vetoBottom1of3Position" unit="mm" x="vetoBottomPosX - 1.5*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ"/>
             <rotationref ref="vetoBottomRotation"/>
         </physvol>
-        <physvol name="vetoBottom2of3">
+        <physvol name="vetoBottom2of4">
             <volumeref ref="scintillatorVolume"/>
-            <position name="vetoBottom2of3Position" unit="mm" x="vetoBottomPosX + 0*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ"/>
+            <position name="vetoBottom2of3Position" unit="mm" x="vetoBottomPosX - 0.5*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ"/>
             <rotationref ref="vetoBottomRotation"/>
         </physvol>
-        <physvol name="vetoBottom3of3">
+        <physvol name="vetoBottom3of4">
             <volumeref ref="scintillatorVolume"/>
-            <position name="vetoBottom3of3Position" unit="mm" x="vetoBottomPosX + 1*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ"/>
+            <position name="vetoBottom3of3Position" unit="mm" x="vetoBottomPosX + 0.5*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ"/>
+            <rotationref ref="vetoBottomRotation"/>
+        </physvol>
+        <physvol name="vetoBottom4of4">
+            <volumeref ref="scintillatorVolume"/>
+            <position name="vetoBottom3of3Position" unit="mm" x="vetoBottomPosX + 1.5*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ"/>
             <rotationref ref="vetoBottomRotation"/>
         </physvol>
         <!-- END veto bottom-->
