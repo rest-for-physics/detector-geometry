@@ -4,6 +4,7 @@
 <!ENTITY materials SYSTEM "../materials.xml">
 <!ENTITY geometry_main SYSTEM "./GeometryMain.gdml">
 <!ENTITY geometry_vetoes SYSTEM "./GeometryVetoes.gdml">
+<!ENTITY geometry_shielding SYSTEM "./GeometryShielding.gdml">
 ]>
 
 <gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
@@ -40,12 +41,6 @@
         <position name="kaptonReadoutPosition" unit="mm" x="0" y="0" z="-chamberLength/2.-kaptonReadoutThickness/2."/>
         <position name="copperReadoutPosition" unit="mm" x="0" y="0" z="-chamberLength/2.-kaptonReadoutThickness - copperReadoutThickness/2."/>
 
-        <!-- Raquette -->
-        <variable name="raquetteThickness" value="15"/>
-        <variable name="raquetteLength" value="275.5"/>
-        <variable name="raquetteWidth" value="80"/>
-        <position name="raqueteUnion" unit="mm" x="-raquetteLength/2." y="0" z="0"/>
-
         <!-- Cathode -->
         <variable name="cathodeThickness" value="15"/>
         <variable name="cathodeHole" value="15"/>
@@ -80,21 +75,22 @@
         <position name="pipePos0" unit="mm" x="0" y="0" z="-pipeLength/2.+copperFlangeThickness/2."/>
         <position name="pipePos1" unit="mm" x="0" y="0" z="pipeLength/2.-copperFlangeThickness/2."/>
 
-        <!-- Lead Shielding -->
+        <!-- Lead Shielding 
         <variable name="LeadBoxShift" value="25"/>
         <variable name="LeadBoxSize" value="550"/>
         <variable name="LeadHolePipeSize" value="50"/>
         <variable name="LeadHoleDetectorSize" value="150"/>
         <position name="LeadHolePipePos" unit="mm" x="0" y="0" z="LeadBoxSize/2."/>
         <position name="LeadHoleRaquettePos" unit="mm" x="-(raquetteLength+10)/2." y="0" z="-chamberLength/2.-raquetteThickness/2.-LeadBoxShift"/>
-
+-->
     </define>
 
     &materials;
     &geometry_vetoes;
+    &geometry_shielding;
     &geometry_main;
 
-                                                                                                    <!-- Physical volume definition (volume and position assignment) ..............................-->
+
     <volume name="World">
         <materialref ref="Air"/>
         <solidref ref="WorldSolid"/>
@@ -113,11 +109,6 @@
             <volumeref ref="copperReadoutVolume"/>
             <positionref ref="copperReadoutPosition"/>
             <rotationref ref="copperReadoutRotation"/>
-        </physvol>
-
-        <physvol name="CuRaquette">
-            <volumeref ref="raquetteVolume"/>
-            <position name="raquettePosition" unit="mm" x="0" y="0" z="-chamberLength/2.-raquetteThickness/2."/>
         </physvol>
 
         <physvol name="CuChamber">
@@ -175,11 +166,14 @@
             <position name="vacuumCathodePatternPosition" unit="mm" x="0" y="0" z="chamberLength/2.+cathodePatternThickness/2."/>
         </physvol>
 
-        <physvol name="LeadShielding">
-            <volumeref ref="LeadBoxVolume"/>
-            <position name="LeadBoxPosition" unit="mm" x="0" y="0" z="LeadBoxShift"/>
+        <!-- BEGIN LEAD SHIELDING -->
+        <physvol name="leadShielding">
+            <volumeref ref="leadBoxVolume"/>
+            <position name="leadBoxPosition" unit="mm" x="0" y="0" z="0"/>
         </physvol>
+        <!-- END LEAD SHIELDING -->
 
+        <!-- BEGIN VETOES -->
         <!-- BEGIN veto front-->
         <physvol name="vetoFront1of4">
             <volumeref ref="scintillatorVolume"/>
@@ -302,6 +296,7 @@
             <rotationref ref="vetoWestRotation"/>
         </physvol>
         <!-- END veto west-->
+        <!-- END VETOES -->
     </volume>
 
     <setup name="Default" version="1.0">
