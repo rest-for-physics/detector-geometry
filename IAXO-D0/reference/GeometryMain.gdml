@@ -16,8 +16,7 @@
     <box name="copperReadout" x="copperReadoutSide" y="copperReadoutSide" z="copperReadoutThickness" lunit="mm" />
 
     <!-- Raquette -->
-    <tube name="raquetteTube" startphi="0" deltaphi="360" rmin="0" rmax="chamberRadius+copperChamberThickness" z="raquetteThickness" aunit="deg" lunit="mm" />
-    <box name="raquetteBox" x="raquetteLength" y="raquetteWidth" z="raquetteThickness" lunit="mm" />
+    <tube name="backplate" startphi="0" deltaphi="360" rmin="0" rmax="chamberRadius+copperChamberThickness" z="backplateThickness" aunit="deg" lunit="mm" />
 
     <!-- Chamber -->
     <tube name="copperChamber" startphi="0" deltaphi="360" rmin="chamberRadius" rmax="copperChamberThickness+chamberRadius" z="chamberLength+cathodeThickness" aunit="deg" lunit="mm" />
@@ -42,30 +41,6 @@
     <tube name="Hole1" startphi="0" deltaphi="360" rmin="0" rmax="cathodePattern1Rad+cathodePattern1Width" z="cathodePatternThickness+2" aunit="deg" lunit="mm" />
 
     <tube name="vacuumCathode" startphi="0" deltaphi="360" rmin="0" rmax="cathodePattern2Rad" z="cathodePatternThickness" aunit="deg" lunit="mm" />
-
-    <!-- Lead Shielding -->
-    <box name="LeadBoxFull" x="LeadBoxSize" y="LeadBoxSize" z="LeadBoxSize" lunit="mm" />
-    <box name="LeadHoleDetector" x="LeadHoleDetectorSize" y="LeadHoleDetectorSize" z="LeadHoleDetectorSize" lunit="mm" />
-    <box name="LeadHolePipe" x="LeadHolePipeSize" y="LeadHolePipeSize" z="LeadBoxSize" lunit="mm" />
-    <box name="LeadHoleRaquette" x="raquetteLength+10" y="raquetteWidth+10" z="raquetteThickness+10" lunit="mm" />
-
-    <!-- Scintillators -->
-    <box name="scintillatorFrontBox" x="LeadBoxSize" y="LeadBoxSize" z="scintillatorVetoWidth" lunit="mm" />
-    <box name="scintillatorTopBox" x="LeadBoxSize+2*scintillatorVetoWidth" y="scintillatorVetoWidth" z="LeadBoxSize+2*scintillatorVetoWidth" lunit="mm" />
-    <box name="scintillatorLatBox" x="scintillatorVetoWidth" y="LeadBoxSize" z="LeadBoxSize+2*scintillatorVetoWidth" lunit="mm" />
-    <box name="scintillatorHoleFront" x="60" y="60" z="scintillatorVetoWidth+20" lunit="mm" />
-
-    <!-- Substractions and unions .................................................................-->
-    <subtraction name="scintillatorFront">
-        <first ref="scintillatorFrontBox"/>
-        <second ref="scintillatorHoleFront"/>
-    </subtraction>
-
-    <union name="raquette">
-        <first ref="raquetteTube"/>
-        <second ref="raquetteBox"/>
-        <positionref ref="raqueteUnion"/>
-    </union>
 
     <union name="copperPipe0">
         <first ref="copperTube"/>
@@ -171,23 +146,6 @@
         <second ref="cathodePattern"/>
     </subtraction>
 
-    <subtraction name="LeadBox1">
-        <first ref="LeadBoxFull"/>
-        <second ref="LeadHoleDetector"/>
-    </subtraction>
-
-    <subtraction name="LeadBox2">
-        <first ref="LeadBox1"/>
-        <second ref="LeadHolePipe"/>
-        <positionref ref="LeadHolePipePos"/>
-    </subtraction>
-
-    <subtraction name="LeadBox">
-        <first ref="LeadBox2"/>
-        <second ref="LeadHoleRaquette"/>
-        <positionref ref="LeadHoleRaquettePos"/>
-    </subtraction>
-
 </solids>
 
 <!-- Structure definition .........................................................................-->
@@ -214,9 +172,9 @@
         <solidref ref="mylarCathode"/>
     </volume>
 
-    <volume name="raquetteVolume">
+    <volume name="backplateVolume">
         <materialref ref="Copper"/>
-        <solidref ref="raquette"/>
+        <solidref ref="backplate"/>
     </volume>
 
     <volume name="copperChamberVolume">
@@ -268,48 +226,6 @@
         <materialref ref="Vacuum"/>
         <solidref ref="vacuumCathodePattern"/>
     </volume>
-
-    <volume name="LeadBoxVolume">
-        <materialref ref="Lead"/>
-        <solidref ref="LeadBox"/>
-    </volume>
-
-    <volume name="scintillatorFrontVolume">
-        <materialref ref="BC408"/>
-        <solidref ref="scintillatorFront"/>
-    </volume>
-
-    <volume name="scintillatorBackVolume">
-        <materialref ref="BC408"/>
-        <solidref ref="scintillatorFrontBox"/>
-    </volume>
-
-    <volume name="scintillatorTopVolume">
-        <materialref ref="BC408"/>
-        <solidref ref="scintillatorTopBox"/>
-    </volume>
-
-    <volume name="scintillatorBottomVolume">
-        <materialref ref="BC408"/>
-        <solidref ref="scintillatorTopBox"/>
-    </volume>
-
-    <volume name="scintillatorEastVolume">
-        <materialref ref="BC408"/>
-        <solidref ref="scintillatorLatBox"/>
-    </volume>
-
-    <volume name="scintillatorWestVolume">
-        <materialref ref="BC408"/>
-        <solidref ref="scintillatorLatBox"/>
-    </volume>
-
-    <volume name="scintillatorVolume">
-        <materialref ref="BC408"/>
-        <solidref ref="scintillatorBoxSolid"/>
-    </volume>
-
-
 
 </structure>
 

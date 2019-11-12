@@ -41,6 +41,9 @@
         <position name="kaptonReadoutPosition" unit="mm" x="0" y="0" z="-chamberLength/2.-kaptonReadoutThickness/2."/>
         <position name="copperReadoutPosition" unit="mm" x="0" y="0" z="-chamberLength/2.-kaptonReadoutThickness - copperReadoutThickness/2."/>
 
+        <!-- Backplate (old raquette) -->
+        <variable name="backplateThickness" value="15"/>
+
         <!-- Cathode -->
         <variable name="cathodeThickness" value="15"/>
         <variable name="cathodeHole" value="15"/>
@@ -75,14 +78,6 @@
         <position name="pipePos0" unit="mm" x="0" y="0" z="-pipeLength/2.+copperFlangeThickness/2."/>
         <position name="pipePos1" unit="mm" x="0" y="0" z="pipeLength/2.-copperFlangeThickness/2."/>
 
-        <!-- Lead Shielding 
-        <variable name="LeadBoxShift" value="25"/>
-        <variable name="LeadBoxSize" value="550"/>
-        <variable name="LeadHolePipeSize" value="50"/>
-        <variable name="LeadHoleDetectorSize" value="150"/>
-        <position name="LeadHolePipePos" unit="mm" x="0" y="0" z="LeadBoxSize/2."/>
-        <position name="LeadHoleRaquettePos" unit="mm" x="-(raquetteLength+10)/2." y="0" z="-chamberLength/2.-raquetteThickness/2.-LeadBoxShift"/>
--->
     </define>
 
     &materials;
@@ -109,6 +104,11 @@
             <volumeref ref="copperReadoutVolume"/>
             <positionref ref="copperReadoutPosition"/>
             <rotationref ref="copperReadoutRotation"/>
+        </physvol>
+
+        <physvol name="CuBackplate">
+            <volumeref ref="backplateVolume"/>
+            <position name="backplatePosition" unit="mm" x="0" y="0" z="-chamberLength/2. - backplateThickness/2."/>
         </physvol>
 
         <physvol name="CuChamber">
