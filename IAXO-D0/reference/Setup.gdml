@@ -5,6 +5,7 @@
 <!ENTITY geometry_main SYSTEM "./GeometryMain.gdml">
 <!ENTITY geometry_vetoes SYSTEM "./GeometryVetoes.gdml">
 <!ENTITY geometry_shielding SYSTEM "./GeometryShielding.gdml">
+<!ENTITY geometry_pipe SYSTEM "./GeometryPipe.gdml">
 ]>
 
 <gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
@@ -16,7 +17,7 @@
         <constant name="degToRad" value="PI/180." />
 
         <!-- World -->
-        <constant name="world_size" value="1000"/>
+        <constant name="world_size" value="1500"/>
         <!-- try to keep that small to avoid interactions inside -->
 
         <!-- Target gas -->
@@ -82,10 +83,12 @@
     </define>
 
     &materials;
+
     &geometry_vetoes;
     &geometry_shielding;
-    &geometry_main;
+    &geometry_pipe;
 
+    &geometry_main;
 
     <volume name="World">
         <materialref ref="Air"/>
@@ -137,24 +140,10 @@
             <position name="copperChamberTopPosition" unit="mm" x="0" y="0" z="chamberLength/2.+copperCathodeThickness+copperChamberTopThickness/2."/>
         </physvol>
 
-        <physvol name="CuPipe">
-            <volumeref ref="copperPipeVolume"/>
-            <position name="copperPipePosition" unit="mm" x="0" y="0" z="chamberLength/2.+copperCathodeThickness+copperChamberTopThickness+pipeLength/2."/>
-        </physvol>
-
-        <physvol name="PTFEPipe">
-            <volumeref ref="teflonPipeVolume"/>
-            <position name="teflonPipePosition" unit="mm" x="0" y="0" z="chamberLength/2.+copperCathodeThickness+copperChamberTopThickness+pipeLength/2."/>
-        </physvol>
 
         <physvol name="PTFECoverCathode">
             <volumeref ref="teflonCoverCathodeVolume"/>
             <position name="teflonCoverCathodePosition" unit="mm" x="0" y="0" z="chamberLength/2.+ cathodePatternThickness/2.+copperCathodeThickness/2.+copperChamberTopThickness/2."/>
-        </physvol>
-
-        <physvol name="VacPipe">
-            <volumeref ref="VacuumPipeVolume"/>
-            <position name="VacuumPipePosition" unit="mm" x="0" y="0" z="chamberLength/2.+ cathodePatternThickness/2.+copperCathodeThickness/2.+copperChamberTopThickness/2.+pipeLength/2."/>
         </physvol>
 
         <physvol name="CuCathodePattern">
@@ -166,6 +155,23 @@
             <volumeref ref="vacuumCathodePatternVolume"/>
             <position name="vacuumCathodePatternPosition" unit="mm" x="0" y="0" z="chamberLength/2.+cathodePatternThickness/2."/>
         </physvol>
+
+        <!-- BEGIN DETECTOR PIPE -->
+        <physvol name="detectorTeflonPipe">
+            <volumeref ref="teflonPipe"/>
+            <position name="detectorTeflonPipePosition" unit="mm" x="0" y="0" z="copperPipeZInWorld + teflonWithRespectToPipeOffset"/>
+        </physvol>
+
+        <physvol name="detectorCopperPipe">
+            <volumeref ref="detectorCopperPipe"/>
+            <position name="detectorCopperPipePosition" unit="mm" x="0" y="0" z="copperPipeZInWorld"/>
+        </physvol>
+
+        <physvol name="pipeFilling">
+            <volumeref ref="pipeFilling"/>
+            <position name="detectorCopperPipePosition" unit="mm" x="0" y="0" z="copperPipeZInWorld + vacuumWithRespectToPipeOffset"/>
+        </physvol>
+        <!-- END DETECTOR PIPE -->
 
         <!-- BEGIN LEAD SHIELDING -->
         <physvol name="leadShielding">
