@@ -32,7 +32,8 @@
         <variable name="chamberRadius" value="50"/>
         <variable name="copperChamberThickness" value="18.5"/>
         <variable name="teflonChamberThickness" value="2"/>
-        <variable name="copperChamberTopThickness" value="14"/>
+        <variable name="copperChamberTopThickness" value="17"/>
+        <variable name="copperChamberTopInnerRadius" value="30"/>
 
         <!-- Readout -->
         <variable name="kaptonReadoutThickness" value="0.5"/>
@@ -42,7 +43,7 @@
         <position name="copperReadoutPosition" unit="mm" x="0" y="0" z="-chamberLength/2.-kaptonReadoutThickness - copperReadoutThickness/2."/>
 
         <!-- Backplate (old raquette) -->
-        <variable name="backplateThickness" value="15"/>
+        <variable name="backplateThickness" value="12"/>
 
         <!-- Cathode -->
         <variable name="cathodeThickness" value="15"/>

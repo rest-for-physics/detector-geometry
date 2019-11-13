@@ -23,7 +23,7 @@
     <tube name="teflonCoverChamber" startphi="0" deltaphi="360" rmin="chamberRadius-teflonChamberThickness" rmax="chamberRadius" z="chamberLength+copperCathodeThickness" aunit="deg" lunit="mm" />
     <tube name="mylarCathode" startphi="0" deltaphi="360" rmin="0" rmax="cathodeHole" z="mylarThickness" aunit="deg" lunit="mm" />
     <tube name="copperCathode" startphi="0" deltaphi="360" rmin="cathodeHole" rmax="chamberRadius-teflonChamberThickness" z="copperCathodeThickness" aunit="deg" lunit="mm" />
-    <tube name="copperChamberTop" startphi="0" deltaphi="360" rmin="cathodeHole" rmax="copperChamberThickness+chamberRadius" z="copperChamberTopThickness" aunit="deg" lunit="mm" />
+    <tube name="copperChamberTop" startphi="0" deltaphi="360" rmin="copperChamberTopInnerRadius" rmax="copperChamberThickness+chamberRadius" z="copperChamberTopThickness" aunit="deg" lunit="mm" />
     <tube name="copperFlangeDetector" startphi="0" deltaphi="360" rmin="copperFlangeHole" rmax="copperChamberThickness+chamberRadius" z="copperFlangeThickness" aunit="deg" lunit="mm" />
     <tube name="copperTube" startphi="0" deltaphi="360" rmin="copperFlangeHole" rmax="copperTubeThickness+copperFlangeHole" z="pipeLength" aunit="deg" lunit="mm" />
     <tube name="copperFlangeExt" startphi="0" deltaphi="360" rmin="copperFlangeHole" rmax="copperFlangeExtRad" z="copperFlangeThickness" aunit="deg" lunit="mm" />
