@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<define>
+    <variable name="leadBoxSize" value="550"/>
+    <variable name="leadBoxShaftShortSide" value="150"/>
+    <variable name="leadBoxShaftLongSide" value="(leadBoxSize - leadBoxShaftShortSide)/2 + leadBoxShaftShortSide + 10"/>
+    <!-- we add an offset to make sure the substraction is done correctly -->
+
+    <position name="leadBoxShaftPosition" x="0" y="0" z="leadBoxShaftLongSide/2 - leadBoxShaftShortSide/2" unit="mm"/>
+
+    <variable name="detectorToShieldingSeparation" value="16"/>
+    <variable name="shieldingOffset" value="-leadBoxShaftShortSide/2.0 + detectorToShieldingSeparation + chamberLength/2. + backplateThickness"/>
+
+</define>
+
+<solids>
+    <box name="leadBoxSolid" x="leadBoxSize" y="leadBoxSize" z="leadBoxSize" lunit="mm"/>
+    <box name="leadBoxShaft" x="leadBoxShaftShortSide" y="leadBoxShaftShortSide" z="leadBoxShaftLongSide" lunit="mm"/>
+
+    <subtraction name="leadBoxWithShaft">
+        <first ref="leadBoxSolid"/>
+        <second ref="leadBoxShaft"/>
+        <positionref ref="leadBoxShaftPosition"/>
+    </subtraction>
+
+</solids>
+
+<structure>
+    <volume name="leadBoxVolume">
+        <materialref ref="Lead"/>
+        <solidref ref="leadBoxWithShaft"/>
+    </volume>
+
+</structure>

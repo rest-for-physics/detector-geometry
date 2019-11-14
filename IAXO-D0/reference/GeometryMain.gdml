@@ -16,15 +16,14 @@
     <box name="copperReadout" x="copperReadoutSide" y="copperReadoutSide" z="copperReadoutThickness" lunit="mm" />
 
     <!-- Raquette -->
-    <tube name="raquetteTube" startphi="0" deltaphi="360" rmin="0" rmax="chamberRadius+copperChamberThickness" z="raquetteThickness" aunit="deg" lunit="mm" />
-    <box name="raquetteBox" x="raquetteLength" y="raquetteWidth" z="raquetteThickness" lunit="mm" />
+    <tube name="backplate" startphi="0" deltaphi="360" rmin="0" rmax="chamberRadius+copperChamberThickness" z="backplateThickness" aunit="deg" lunit="mm" />
 
     <!-- Chamber -->
     <tube name="copperChamber" startphi="0" deltaphi="360" rmin="chamberRadius" rmax="copperChamberThickness+chamberRadius" z="chamberLength+cathodeThickness" aunit="deg" lunit="mm" />
     <tube name="teflonCoverChamber" startphi="0" deltaphi="360" rmin="chamberRadius-teflonChamberThickness" rmax="chamberRadius" z="chamberLength+copperCathodeThickness" aunit="deg" lunit="mm" />
     <tube name="mylarCathode" startphi="0" deltaphi="360" rmin="0" rmax="cathodeHole" z="mylarThickness" aunit="deg" lunit="mm" />
     <tube name="copperCathode" startphi="0" deltaphi="360" rmin="cathodeHole" rmax="chamberRadius-teflonChamberThickness" z="copperCathodeThickness" aunit="deg" lunit="mm" />
-    <tube name="copperChamberTop" startphi="0" deltaphi="360" rmin="cathodeHole" rmax="copperChamberThickness+chamberRadius" z="copperChamberTopThickness" aunit="deg" lunit="mm" />
+    <tube name="copperChamberTop" startphi="0" deltaphi="360" rmin="copperChamberTopInnerRadius" rmax="copperChamberThickness+chamberRadius" z="copperChamberTopThickness" aunit="deg" lunit="mm" />
     <tube name="copperFlangeDetector" startphi="0" deltaphi="360" rmin="copperFlangeHole" rmax="copperChamberThickness+chamberRadius" z="copperFlangeThickness" aunit="deg" lunit="mm" />
     <tube name="copperTube" startphi="0" deltaphi="360" rmin="copperFlangeHole" rmax="copperTubeThickness+copperFlangeHole" z="pipeLength" aunit="deg" lunit="mm" />
     <tube name="copperFlangeExt" startphi="0" deltaphi="360" rmin="copperFlangeHole" rmax="copperFlangeExtRad" z="copperFlangeThickness" aunit="deg" lunit="mm" />
@@ -42,30 +41,6 @@
     <tube name="Hole1" startphi="0" deltaphi="360" rmin="0" rmax="cathodePattern1Rad+cathodePattern1Width" z="cathodePatternThickness+2" aunit="deg" lunit="mm" />
 
     <tube name="vacuumCathode" startphi="0" deltaphi="360" rmin="0" rmax="cathodePattern2Rad" z="cathodePatternThickness" aunit="deg" lunit="mm" />
-
-    <!-- Lead Shielding -->
-    <box name="LeadBoxFull" x="LeadBoxSize" y="LeadBoxSize" z="LeadBoxSize" lunit="mm" />
-    <box name="LeadHoleDetector" x="LeadHoleDetectorSize" y="LeadHoleDetectorSize" z="LeadHoleDetectorSize" lunit="mm" />
-    <box name="LeadHolePipe" x="LeadHolePipeSize" y="LeadHolePipeSize" z="LeadBoxSize" lunit="mm" />
-    <box name="LeadHoleRaquette" x="raquetteLength+10" y="raquetteWidth+10" z="raquetteThickness+10" lunit="mm" />
-
-    <!-- Scintillators -->
-    <box name="scintillatorFrontBox" x="LeadBoxSize" y="LeadBoxSize" z="scintillatorVetoWidth" lunit="mm" />
-    <box name="scintillatorTopBox" x="LeadBoxSize+2*scintillatorVetoWidth" y="scintillatorVetoWidth" z="LeadBoxSize+2*scintillatorVetoWidth" lunit="mm" />
-    <box name="scintillatorLatBox" x="scintillatorVetoWidth" y="LeadBoxSize" z="LeadBoxSize+2*scintillatorVetoWidth" lunit="mm" />
-    <box name="scintillatorHoleFront" x="60" y="60" z="scintillatorVetoWidth+20" lunit="mm" />
-
-    <!-- Substractions and unions .................................................................-->
-    <subtraction name="scintillatorFront">
-        <first ref="scintillatorFrontBox"/>
-        <second ref="scintillatorHoleFront"/>
-    </subtraction>
-
-    <union name="raquette">
-        <first ref="raquetteTube"/>
-        <second ref="raquetteBox"/>
-        <positionref ref="raqueteUnion"/>
-    </union>
 
     <union name="copperPipe0">
         <first ref="copperTube"/>
@@ -171,23 +146,6 @@
         <second ref="cathodePattern"/>
     </subtraction>
 
-    <subtraction name="LeadBox1">
-        <first ref="LeadBoxFull"/>
-        <second ref="LeadHoleDetector"/>
-    </subtraction>
-
-    <subtraction name="LeadBox2">
-        <first ref="LeadBox1"/>
-        <second ref="LeadHolePipe"/>
-        <positionref ref="LeadHolePipePos"/>
-    </subtraction>
-
-    <subtraction name="LeadBox">
-        <first ref="LeadBox2"/>
-        <second ref="LeadHoleRaquette"/>
-        <positionref ref="LeadHoleRaquettePos"/>
-    </subtraction>
-
 </solids>
 
 <!-- Structure definition .........................................................................-->
@@ -214,9 +172,9 @@
         <solidref ref="mylarCathode"/>
     </volume>
 
-    <volume name="raquetteVolume">
+    <volume name="backplateVolume">
         <materialref ref="Copper"/>
-        <solidref ref="raquette"/>
+        <solidref ref="backplate"/>
     </volume>
 
     <volume name="copperChamberVolume">
@@ -267,159 +225,6 @@
     <volume name="vacuumCathodePatternVolume">
         <materialref ref="Vacuum"/>
         <solidref ref="vacuumCathodePattern"/>
-    </volume>
-
-    <volume name="LeadBoxVolume">
-        <materialref ref="Lead"/>
-        <solidref ref="LeadBox"/>
-    </volume>
-
-    <volume name="scintillatorFrontVolume">
-        <materialref ref="BC408"/>
-        <solidref ref="scintillatorFront"/>
-    </volume>
-
-    <volume name="scintillatorBackVolume">
-        <materialref ref="BC408"/>
-        <solidref ref="scintillatorFrontBox"/>
-    </volume>
-
-    <volume name="scintillatorTopVolume">
-        <materialref ref="BC408"/>
-        <solidref ref="scintillatorTopBox"/>
-    </volume>
-
-    <volume name="scintillatorBottomVolume">
-        <materialref ref="BC408"/>
-        <solidref ref="scintillatorTopBox"/>
-    </volume>
-
-    <volume name="scintillatorEastVolume">
-        <materialref ref="BC408"/>
-        <solidref ref="scintillatorLatBox"/>
-    </volume>
-
-    <volume name="scintillatorWestVolume">
-        <materialref ref="BC408"/>
-        <solidref ref="scintillatorLatBox"/>
-    </volume>
-
-    <!-- Physical volume definition (volume and position assignment) ..............................-->
-    <volume name="World">
-        <materialref ref="Air"/>
-        <solidref ref="WorldSolid"/>
-
-        <physvol name="gas">
-            <volumeref ref="gasVolume"/>
-            <position name="gasPosition" unit="mm" x="0" y="0" z="0"/>
-        </physvol>
-
-        <physvol name="kapton4Readout">
-            <volumeref ref="kaptonReadoutVolume"/>
-            <positionref ref="kaptonReadoutPosition"/>
-        </physvol>
-
-        <physvol name="CuReadout">
-            <volumeref ref="copperReadoutVolume"/>
-            <positionref ref="copperReadoutPosition"/>
-            <rotationref ref="copperReadoutRotation"/>
-        </physvol>
-
-        <physvol name="CuRaquette">
-            <volumeref ref="raquetteVolume"/>
-            <position name="raquettePosition" unit="mm" x="0" y="0" z="-chamberLength/2.-raquetteThickness/2."/>
-        </physvol>
-
-        <physvol name="CuChamber">
-            <volumeref ref="copperChamberVolume"/>
-            <position name="copperChamberPosition" unit="mm" x="0" y="0" z="cathodeThickness/2."/>
-        </physvol>
-
-        <physvol name="PTFECoverChamber">
-            <volumeref ref="teflonCoverChamberVolume"/>
-            <position name="teflonCoverChamberPosition" unit="mm" x="0" y="0" z="copperCathodeThickness/2."/>
-        </physvol>
-
-        <physvol name="mylarCat">
-            <volumeref ref="mylarCathodeVolume"/>
-            <positionref ref="mylarCathodePosition" unit="mm" x="0" y="0" z="chamberLength/2.-mylarThickness/2."/>
-        </physvol>
-
-        <physvol name="CuCathode">
-            <volumeref ref="copperCathodeVolume"/>
-            <position name="copperCathodePosition" unit="mm" x="0" y="0" z="chamberLength/2.+copperCathodeThickness/2."/>
-        </physvol>
-
-        <physvol name="CuChamberTop">
-            <volumeref ref="copperChamberTopVolume"/>
-            <position name="copperChamberTopPosition" unit="mm" x="0" y="0" z="chamberLength/2.+copperCathodeThickness+copperChamberTopThickness/2."/>
-        </physvol>
-
-        <physvol name="CuPipe">
-            <volumeref ref="copperPipeVolume"/>
-            <position name="copperPipePosition" unit="mm" x="0" y="0" z="chamberLength/2.+copperCathodeThickness+copperChamberTopThickness+pipeLength/2."/>
-        </physvol>
-
-        <physvol name="PTFEPipe">
-            <volumeref ref="teflonPipeVolume"/>
-            <position name="teflonPipePosition" unit="mm" x="0" y="0" z="chamberLength/2.+copperCathodeThickness+copperChamberTopThickness+pipeLength/2."/>
-        </physvol>
-
-        <physvol name="PTFECoverCathode">
-            <volumeref ref="teflonCoverCathodeVolume"/>
-            <position name="teflonCoverCathodePosition" unit="mm" x="0" y="0" z="chamberLength/2.+ cathodePatternThickness/2.+copperCathodeThickness/2.+copperChamberTopThickness/2."/>
-        </physvol>
-
-        <physvol name="VacPipe">
-            <volumeref ref="VacuumPipeVolume"/>
-            <position name="VacuumPipePosition" unit="mm" x="0" y="0" z="chamberLength/2.+ cathodePatternThickness/2.+copperCathodeThickness/2.+copperChamberTopThickness/2.+pipeLength/2."/>
-        </physvol>
-
-        <physvol name="CuCathodePattern">
-            <volumeref ref="cathodePatternVolume"/>
-            <position name="cathodePatternPosition" unit="mm" x="0" y="0" z="chamberLength/2.+cathodePatternThickness/2."/>
-        </physvol>
-
-        <physvol name="VacCathodePattern">
-            <volumeref ref="vacuumCathodePatternVolume"/>
-            <position name="vacuumCathodePatternPosition" unit="mm" x="0" y="0" z="chamberLength/2.+cathodePatternThickness/2."/>
-        </physvol>
-
-        <physvol name="LeadShielding">
-            <volumeref ref="LeadBoxVolume"/>
-            <position name="LeadBoxPosition" unit="mm" x="0" y="0" z="LeadBoxShift"/>
-        </physvol>
-
-        <physvol name="vetoFront">
-            <volumeref ref="scintillatorFrontVolume"/>
-            <position name="scintillatorFrontPosition" unit="mm" x="0" y="0" z="LeadBoxSize/2. + scintillatorVetoWidth/2.+LeadBoxShift"/>
-        </physvol>
-
-        <physvol name="vetoBack">
-            <volumeref ref="scintillatorBackVolume"/>
-            <position name="scintillatorBackPosition" unit="mm" x="0" y="0" z="-LeadBoxSize/2. - scintillatorVetoWidth/2.+LeadBoxShift"/>
-        </physvol>
-
-        <physvol name="vetoTop">
-            <volumeref ref="scintillatorTopVolume"/>
-            <position name="scintillatorTopPosition" unit="mm" x="0" y="LeadBoxSize/2. + scintillatorVetoWidth/2." z="LeadBoxShift"/>
-        </physvol>
-
-        <physvol name="vetoBottom">
-            <volumeref ref="scintillatorBottomVolume"/>
-            <position name="scintillatorBottomPosition" unit="mm" x="0" y="-LeadBoxSize/2. - scintillatorVetoWidth/2." z="LeadBoxShift"/>
-        </physvol>
-
-        <physvol name="vetoEast">
-            <volumeref ref="scintillatorEastVolume"/>
-            <position name="scintillatorEastPosition" unit="mm" x="-LeadBoxSize/2. - scintillatorVetoWidth/2." y="0" z="LeadBoxShift"/>
-        </physvol>
-
-        <physvol name="vetoWest">
-            <volumeref ref="scintillatorWestVolume"/>
-            <position name="scintillatorWestPosition" unit="mm" x="LeadBoxSize/2. + scintillatorVetoWidth/2." y="0" z="LeadBoxShift"/>
-        </physvol>
-
     </volume>
 
 </structure>

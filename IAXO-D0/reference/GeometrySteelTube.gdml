@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<define>
+    <variable name="steelPipeFlangeHeigth" value="10.0"/>
+    <variable name="steelPipeFlangeGenericRadiusOffset" value="10.0"/>
+
+    <variable name="steelPipeCylinder1Length" value="120.0"/>
+    <variable name="steelPipeCylinder1InnerRadius" value="104.0/2.0"/>
+    <variable name="steelPipeCylinder1OutterRadius" value="108.0/2.0"/>
+
+    <position name="steelPipe1Flange1Position" x="0" y="0" z="-steelPipeCylinder1Length/2.0 + steelPipeFlangeHeigth/2.0" unit="mm"/>
+    <position name="steelPipe1Flange2Position" x="0" y="0" z="+steelPipeCylinder1Length/2.0 - steelPipeFlangeHeigth/2.0" unit="mm"/>
+
+    <variable name="steelPipeCylinder2Length" value="525.0"/>
+    <variable name="steelPipeCylinder2InnerRadius" value="155.0/2.0"/>
+    <variable name="steelPipeCylinder2OutterRadius" value="159.0/2.0"/>
+
+    <position name="steelPipe2Flange1Position" x="0" y="0" z="-steelPipeCylinder2Length/2.0 + steelPipeFlangeHeigth/2.0" unit="mm"/>
+    <position name="steelPipe2Flange2Position" x="0" y="0" z="+steelPipeCylinder2Length/2.0 - steelPipeFlangeHeigth/2.0" unit="mm"/>
+
+    <position name="steelPipe2WithRespectTo1Position" x="0" y="0" z="steelPipeCylinder1Length/2.0 + steelPipeCylinder2Length/2.0" unit="mm"/>
+
+    <variable name="steelPipeCylinder3Length" value="67.0"/>
+    <variable name="steelPipeCylinder3InnerRadius" value="150.0/2.0"/>
+    <variable name="steelPipeCylinder3OutterRadius" value="steelPipeCylinder3InnerRadius + steelPipeFlangeGenericRadiusOffset/2.0"/>
+
+    <position name="steelPipe3Flange1Position" x="0" y="0" z="-steelPipeCylinder3Length/2.0 + steelPipeFlangeHeigth/2.0" unit="mm"/>
+    <position name="steelPipe3Flange2Position" x="0" y="0" z="+steelPipeCylinder3Length/2.0 - steelPipeFlangeHeigth/2.0" unit="mm"/>
+
+    <position name="steelPipe3WithRespectTo1Position" x="0" y="0" z="steelPipeCylinder1Length/2.0 + steelPipeCylinder2Length + steelPipeCylinder3Length/2.0" unit="mm"/>
+
+    <variable name="steelPipeCone1Length" value="2229.0"/>
+    <variable name="steelPipeCone1Thickness" value="2.0"/>
+    <variable name="steelPipeCone1InnerRadius1" value="150.0/2.0"/>
+    <variable name="steelPipeCone1InnerRadius2" value="381.0/2.0"/>
+
+    <position name="steelPipeCone1WithRespectTo1Position" x="0" y="0" z="steelPipeCylinder1Length/2.0 + steelPipeCylinder2Length + steelPipeCylinder3Length + steelPipeCone1Length/2.0" unit="mm"/>
+
+    <variable name="steelPipeCone2Length" value="3545.0"/>
+    <variable name="steelPipeCone2Thickness" value="2.0"/>
+    <variable name="steelPipeCone2InnerRadius1" value="steelPipeCone1InnerRadius2"/>
+    <variable name="steelPipeCone2InnerRadius2" value="800.0/2.0"/>
+
+    <position name="steelPipeCone2WithRespectTo1Position" x="0" y="0" z="steelPipeCylinder1Length/2.0 + steelPipeCylinder2Length + steelPipeCylinder3Length + steelPipeCone1Length + steelPipeCone2Length/2.0" unit="mm"/>
+
+
+    <!-- position in world -->
+    <variable name="steelPipeWithRespectToCopperPipeOffset" value="copperPipeTotalLength + steelPipeCylinder1Length/2.0 - copperPipeDetectorFlangeLength/2.0"/>
+
+</define>
+
+<solids>
+    <!-- steel pipe segment 1 -->
+    <tube name="steelPipe1Tube" rmin="steelPipeCylinder1InnerRadius" rmax="steelPipeCylinder1OutterRadius" z="steelPipeCylinder1Length" startphi="0" deltaphi="360" aunit="deg" lunit="mm"/>
+    <tube name="steelPipe1Flange1" rmin="steelPipeCylinder1OutterRadius" rmax="copperPipeOutFlangeOutterRadius" z="steelPipeFlangeHeigth" startphi="0" deltaphi="360" aunit="deg" lunit="mm"/>
+    <tube name="steelPipe1Flange2" rmin="steelPipeCylinder1OutterRadius" rmax="steelPipeCylinder2OutterRadius + steelPipeFlangeGenericRadiusOffset" z="steelPipeFlangeHeigth" startphi="0" deltaphi="360" aunit="deg" lunit="mm"/>
+
+    <union name="steelPipe1WithFlange">
+        <first ref="steelPipe1Tube"/>
+        <second ref="steelPipe1Flange1"/>
+        <positionref ref="steelPipe1Flange1Position"/>
+    </union>
+    <union name="steelPipe1WithFlange">
+        <first ref="steelPipe1WithFlange"/>
+        <second ref="steelPipe1Flange2"/>
+        <positionref ref="steelPipe1Flange2Position"/>
+    </union>
+
+    <!-- steel pipe segment 2 -->
+    <tube name="steelPipe2Tube" rmin="steelPipeCylinder2InnerRadius" rmax="steelPipeCylinder2OutterRadius" z="steelPipeCylinder2Length" startphi="0" deltaphi="360" aunit="deg" lunit="mm"/>
+    <tube name="steelPipe2Flange1" rmin="steelPipeCylinder2OutterRadius" rmax="steelPipeCylinder2OutterRadius + steelPipeFlangeGenericRadiusOffset" z="steelPipeFlangeHeigth" startphi="0" deltaphi="360" aunit="deg" lunit="mm"/>
+    <tube name="steelPipe2Flange2" rmin="steelPipeCylinder2OutterRadius" rmax="steelPipeCylinder3OutterRadius + steelPipeFlangeGenericRadiusOffset" z="steelPipeFlangeHeigth" startphi="0" deltaphi="360" aunit="deg" lunit="mm"/>
+
+    <union name="steelPipe2WithFlange">
+        <first ref="steelPipe2Tube"/>
+        <second ref="steelPipe2Flange1"/>
+        <positionref ref="steelPipe2Flange1Position"/>
+    </union>
+    <union name="steelPipe2WithFlange">
+        <first ref="steelPipe2WithFlange"/>
+        <second ref="steelPipe2Flange2"/>
+        <positionref ref="steelPipe2Flange2Position"/>
+    </union>
+
+    <!-- steel pipe segment 3 -->
+    <tube name="steelPipe3Tube" rmin="steelPipeCylinder3InnerRadius" rmax="steelPipeCylinder3OutterRadius" z="steelPipeCylinder3Length" startphi="0" deltaphi="360" aunit="deg" lunit="mm"/>
+    <tube name="steelPipe3Flange1" rmin="steelPipeCylinder3OutterRadius" rmax="steelPipeCylinder3OutterRadius + steelPipeFlangeGenericRadiusOffset" z="steelPipeFlangeHeigth" startphi="0" deltaphi="360" aunit="deg" lunit="mm"/>
+    <tube name="steelPipe3Flange2" rmin="steelPipeCylinder3OutterRadius" rmax="steelPipeCylinder3OutterRadius + steelPipeFlangeGenericRadiusOffset" z="steelPipeFlangeHeigth" startphi="0" deltaphi="360" aunit="deg" lunit="mm"/>
+
+    <union name="steelPipe3WithFlange">
+        <first ref="steelPipe3Tube"/>
+        <second ref="steelPipe3Flange1"/>
+        <positionref ref="steelPipe3Flange1Position"/>
+    </union>
+    <union name="steelPipe3WithFlange">
+        <first ref="steelPipe3WithFlange"/>
+        <second ref="steelPipe3Flange2"/>
+        <positionref ref="steelPipe3Flange2Position"/>
+    </union>
+
+    <!-- steel pipe segment 4 / cone (first part) -->
+    <cone name="steelPipeCone1" rmin1="steelPipeCone1InnerRadius1" rmax1="steelPipeCone1InnerRadius1 + steelPipeCone1Thickness" rmin2="steelPipeCone1InnerRadius2" rmax2="steelPipeCone1InnerRadius2 + steelPipeCone1Thickness" z="steelPipeCone1Length" startphi="0" deltaphi="360" aunit="deg" lunit="mm"/>
+    <!-- steel pipe segment 5 / cone (second/final part) -->
+    <cone name="steelPipeCone2" rmin1="steelPipeCone2InnerRadius1" rmax1="steelPipeCone2InnerRadius1 + steelPipeCone2Thickness" rmin2="steelPipeCone2InnerRadius2" rmax2="steelPipeCone2InnerRadius2 + steelPipeCone2hickness" z="steelPipeCone2Length" startphi="0" deltaphi="360" aunit="deg" lunit="mm"/>
+
+    <!-- steel pipe complete -->
+    <union name="steelPipe">
+        <first ref="steelPipe1WithFlange"/>
+        <second ref="steelPipe2WithFlange"/>
+        <positionref ref="steelPipe2WithRespectTo1Position"/>
+    </union>
+    <union name="steelPipe">
+        <first ref="steelPipe"/>
+        <second ref="steelPipe3WithFlange"/>
+        <positionref ref="steelPipe3WithRespectTo1Position"/>
+    </union>
+    <union name="steelPipe">
+        <first ref="steelPipe"/>
+        <second ref="steelPipeCone1"/>
+        <positionref ref="steelPipeCone1WithRespectTo1Position"/>
+    </union>
+    <union name="steelPipe">
+        <first ref="steelPipe"/>
+        <second ref="steelPipeCone2"/>
+        <positionref ref="steelPipeCone2WithRespectTo1Position"/>
+    </union>
+
+    <!-- steel pipe vacuum/air/gas filling -->
+    <tube name="steelPipe1TubeFilling" rmin="0" rmax="steelPipeCylinder1InnerRadius" z="steelPipeCylinder1Length" startphi="0" deltaphi="360" aunit="deg" lunit="mm"/>
+    <tube name="steelPipe2TubeFilling" rmin="0" rmax="steelPipeCylinder2InnerRadius" z="steelPipeCylinder2Length" startphi="0" deltaphi="360" aunit="deg" lunit="mm"/>
+    <tube name="steelPipe3TubeFilling" rmin="0" rmax="steelPipeCylinder3InnerRadius" z="steelPipeCylinder3Length" startphi="0" deltaphi="360" aunit="deg" lunit="mm"/>
+    <cone name="steelPipeCone1Filling" rmin1="0" rmax1="steelPipeCone1InnerRadius1" rmin2="0" rmax2="steelPipeCone1InnerRadius2" z="steelPipeCone1Length" startphi="0" deltaphi="360" aunit="deg" lunit="mm"/>
+    <cone name="steelPipeCone2Filling" rmin1="0" rmax1="steelPipeCone2InnerRadius1" rmin2="0" rmax2="steelPipeCone2InnerRadius2" z="steelPipeCone2Length" startphi="0" deltaphi="360" aunit="deg" lunit="mm"/>
+
+    <union name="steelPipeFilling">
+        <first ref="steelPipe1TubeFilling"/>
+        <second ref="steelPipe2TubeFilling"/>
+        <positionref ref="steelPipe2WithRespectTo1Position"/>
+    </union>
+    <union name="steelPipeFilling">
+        <first ref="steelPipeFilling"/>
+        <second ref="steelPipe3TubeFilling"/>
+        <positionref ref="steelPipe3WithRespectTo1Position"/>
+    </union>
+    <union name="steelPipeFilling">
+        <first ref="steelPipeFilling"/>
+        <second ref="steelPipeCone1Filling"/>
+        <positionref ref="steelPipeCone1WithRespectTo1Position"/>
+    </union>
+    <union name="steelPipeFilling">
+        <first ref="steelPipeFilling"/>
+        <second ref="steelPipeCone2Filling"/>
+        <positionref ref="steelPipeCone2WithRespectTo1Position"/>
+    </union>
+
+</solids>
+
+<structure>
+    <volume name="steelPipe">
+        <materialref ref="Stainlesssteel"/>
+        <solidref ref="steelPipe"/>
+    </volume>
+    <volume name="steelPipeVacuum">
+        <materialref ref="Vacuum"/>
+        <solidref ref="steelPipeFilling"/>
+    </volume>
+</structure>
