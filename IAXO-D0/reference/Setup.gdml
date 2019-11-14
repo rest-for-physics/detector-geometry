@@ -6,6 +6,7 @@
 <!ENTITY geometry_vetoes SYSTEM "./GeometryVetoes.gdml">
 <!ENTITY geometry_shielding SYSTEM "./GeometryShielding.gdml">
 <!ENTITY geometry_pipe SYSTEM "./GeometryPipe.gdml">
+<!ENTITY geometry_steel_tube SYSTEM "./GeometrySteelTube.gdml">
 ]>
 
 <gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
@@ -17,7 +18,7 @@
         <constant name="degToRad" value="PI/180." />
 
         <!-- World -->
-        <constant name="world_size" value="1500"/>
+        <constant name="world_size" value="1000"/>
         <!-- try to keep that small to avoid interactions inside -->
 
         <!-- Target gas -->
@@ -87,6 +88,7 @@
     &geometry_vetoes;
     &geometry_shielding;
     &geometry_pipe;
+    &geometry_steel_tube;
 
     &geometry_main;
 
@@ -172,6 +174,17 @@
             <position name="detectorCopperPipePosition" unit="mm" x="0" y="0" z="copperPipeZInWorld + vacuumWithRespectToPipeOffset"/>
         </physvol>
         <!-- END DETECTOR PIPE -->
+
+        <!-- BEGIN STEEL PIPE -->
+        <physvol name="steelPipe">
+            <volumeref ref="steelPipe"/>
+            <position name="steelPipePosition" unit="mm" x="0" y="0" z="copperPipeZInWorld + steelPipeWithRespectToCopperPipeOffset"/>
+        </physvol>
+        <physvol name="steelPipeVacuum">
+            <volumeref ref="steelPipeVacuum"/>
+            <position name="steelPipePosition" unit="mm" x="0" y="0" z="copperPipeZInWorld + steelPipeWithRespectToCopperPipeOffset"/>
+        </physvol>
+        <!-- END STEEL PIPE -->
 
         <!-- BEGIN LEAD SHIELDING -->
         <physvol name="leadShielding">
