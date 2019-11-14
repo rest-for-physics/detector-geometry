@@ -112,7 +112,7 @@
 
         <physvol name="CuBackplate">
             <volumeref ref="backplateVolume"/>
-            <position name="backplatePosition" unit="mm" x="0" y="0" z="-chamberLength/2. - backplateThickness/2."/>
+            <position name="backplatePosition" unit="mm" x="0" y="0" z="-chamberLength/2. - backplateThickness/2. - detectorOffset"/>
         </physvol>
 
         <physvol name="CuChamber">
@@ -176,7 +176,7 @@
         <!-- BEGIN LEAD SHIELDING -->
         <physvol name="leadShielding">
             <volumeref ref="leadBoxVolume"/>
-            <position name="leadBoxPosition" unit="mm" x="0" y="0" z="0"/>
+            <position name="leadBoxPosition" unit="mm" x="0" y="0" z="0 - shieldingOffset"/>
         </physvol>
         <!-- END LEAD SHIELDING -->
 
@@ -184,22 +184,22 @@
         <!-- BEGIN veto front-->
         <physvol name="vetoFront1of4">
             <volumeref ref="scintillatorVolume"/>
-            <position name="vetoFront1of4Position" unit="mm" x="vetoFrontPosX - 1.5*scintillatorShortSide" y="vetoFrontPosY" z="vetoFrontPosZ"/>
+            <position name="vetoFront1of4Position" unit="mm" x="vetoFrontPosX - 1.5*scintillatorShortSide" y="vetoFrontPosY" z="vetoFrontPosZ - shieldingOffset"/>
             <rotationref ref="vetoFrontRotation"/>
         </physvol>
         <physvol name="vetoFront2of4">
             <volumeref ref="scintillatorVolumeWithRightHole"/>
-            <position name="vetoFront2of4Position" unit="mm" x="vetoFrontPosX - 0.5*scintillatorShortSide" y="vetoFrontPosY" z="vetoFrontPosZ"/>
+            <position name="vetoFront2of4Position" unit="mm" x="vetoFrontPosX - 0.5*scintillatorShortSide" y="vetoFrontPosY" z="vetoFrontPosZ - shieldingOffset"/>
             <rotationref ref="vetoFrontRotation"/>
         </physvol>
         <physvol name="vetoFront3of4">
             <volumeref ref="scintillatorVolumeWithLeftHole"/>
-            <position name="vetoFront3of4Position" unit="mm" x="vetoFrontPosX + 0.5*scintillatorShortSide" y="vetoFrontPosY" z="vetoFrontPosZ"/>
+            <position name="vetoFront3of4Position" unit="mm" x="vetoFrontPosX + 0.5*scintillatorShortSide" y="vetoFrontPosY" z="vetoFrontPosZ - shieldingOffset"/>
             <rotationref ref="vetoFrontRotation"/>
         </physvol>
         <physvol name="vetoFront4of4">
             <volumeref ref="scintillatorVolume"/>
-            <position name="vetoFront4of4Position" unit="mm" x="vetoFrontPosX + 1.5*scintillatorShortSide" y="vetoFrontPosY" z="vetoFrontPosZ"/>
+            <position name="vetoFront4of4Position" unit="mm" x="vetoFrontPosX + 1.5*scintillatorShortSide" y="vetoFrontPosY" z="vetoFrontPosZ - shieldingOffset"/>
             <rotationref ref="vetoFrontRotation"/>
         </physvol>
         <!-- END veto front-->
@@ -207,17 +207,17 @@
         <!-- BEGIN veto back-->
         <physvol name="vetoBack1of3">
             <volumeref ref="scintillatorVolume"/>
-            <position name="vetoBack1of3Position" unit="mm" x="vetoBackPosX" y="vetoBackPosY - 1*scintillatorShortSide" z="vetoBackPosZ"/>
+            <position name="vetoBack1of3Position" unit="mm" x="vetoBackPosX" y="vetoBackPosY - 1*scintillatorShortSide" z="vetoBackPosZ - shieldingOffset"/>
             <rotationref ref="vetoBackRotation"/>
         </physvol>
         <physvol name="vetoBack2of3">
             <volumeref ref="scintillatorVolume"/>
-            <position name="vetoBack2of3Position" unit="mm" x="vetoBackPosX" y="vetoBackPosY - 0*scintillatorShortSide" z="vetoBackPosZ"/>
+            <position name="vetoBack2of3Position" unit="mm" x="vetoBackPosX" y="vetoBackPosY - 0*scintillatorShortSide" z="vetoBackPosZ - shieldingOffset"/>
             <rotationref ref="vetoBackRotation"/>
         </physvol>
         <physvol name="vetoBack3of3">
             <volumeref ref="scintillatorVolume"/>
-            <position name="vetoBack3of3Position" unit="mm" x="vetoBackPosX" y="vetoBackPosY + 1*scintillatorShortSide" z="vetoBackPosZ"/>
+            <position name="vetoBack3of3Position" unit="mm" x="vetoBackPosX" y="vetoBackPosY + 1*scintillatorShortSide" z="vetoBackPosZ - shieldingOffset"/>
             <rotationref ref="vetoBackRotation"/>
         </physvol>
         <!-- END veto back-->
@@ -225,22 +225,22 @@
         <!-- BEGIN veto top-->
         <physvol name="vetoTop1of4">
             <volumeref ref="scintillatorVolume"/>
-            <position name="vetoTop1of4Position" unit="mm" x="vetoTopPosX - 1.5*scintillatorShortSide" y="vetoTopPosY" z="vetoTopPosZ"/>
+            <position name="vetoTop1of4Position" unit="mm" x="vetoTopPosX - 1.5*scintillatorShortSide" y="vetoTopPosY" z="vetoTopPosZ - shieldingOffset"/>
             <rotationref ref="vetoTopRotation"/>
         </physvol>
         <physvol name="vetoTop2of4">
             <volumeref ref="scintillatorVolume"/>
-            <position name="vetoTop2of4Position" unit="mm" x="vetoTopPosX - 0.5*scintillatorShortSide" y="vetoTopPosY" z="vetoTopPosZ"/>
+            <position name="vetoTop2of4Position" unit="mm" x="vetoTopPosX - 0.5*scintillatorShortSide" y="vetoTopPosY" z="vetoTopPosZ - shieldingOffset"/>
             <rotationref ref="vetoTopRotation"/>
         </physvol>
         <physvol name="vetoTop3of4">
             <volumeref ref="scintillatorVolume"/>
-            <position name="vetoTop3of4Position" unit="mm" x="vetoTopPosX + 0.5*scintillatorShortSide" y="vetoTopPosY" z="vetoTopPosZ"/>
+            <position name="vetoTop3of4Position" unit="mm" x="vetoTopPosX + 0.5*scintillatorShortSide" y="vetoTopPosY" z="vetoTopPosZ - shieldingOffset"/>
             <rotationref ref="vetoTopRotation"/>
         </physvol>
         <physvol name="vetoTop4of4">
             <volumeref ref="scintillatorVolume"/>
-            <position name="vetoTop4of4Position" unit="mm" x="vetoTopPosX + 1.5*scintillatorShortSide" y="vetoTopPosY" z="vetoTopPosZ"/>
+            <position name="vetoTop4of4Position" unit="mm" x="vetoTopPosX + 1.5*scintillatorShortSide" y="vetoTopPosY" z="vetoTopPosZ - shieldingOffset"/>
             <rotationref ref="vetoTopRotation"/>
         </physvol>
         <!-- END veto top-->
@@ -248,22 +248,22 @@
         <!-- BEGIN veto bottom-->
         <physvol name="vetoBottom1of4">
             <volumeref ref="scintillatorVolume"/>
-            <position name="vetoBottom1of3Position" unit="mm" x="vetoBottomPosX - 1.5*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ"/>
+            <position name="vetoBottom1of3Position" unit="mm" x="vetoBottomPosX - 1.5*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ - shieldingOffset"/>
             <rotationref ref="vetoBottomRotation"/>
         </physvol>
         <physvol name="vetoBottom2of4">
             <volumeref ref="scintillatorVolume"/>
-            <position name="vetoBottom2of3Position" unit="mm" x="vetoBottomPosX - 0.5*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ"/>
+            <position name="vetoBottom2of3Position" unit="mm" x="vetoBottomPosX - 0.5*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ - shieldingOffset"/>
             <rotationref ref="vetoBottomRotation"/>
         </physvol>
         <physvol name="vetoBottom3of4">
             <volumeref ref="scintillatorVolume"/>
-            <position name="vetoBottom3of3Position" unit="mm" x="vetoBottomPosX + 0.5*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ"/>
+            <position name="vetoBottom3of3Position" unit="mm" x="vetoBottomPosX + 0.5*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ - shieldingOffset"/>
             <rotationref ref="vetoBottomRotation"/>
         </physvol>
         <physvol name="vetoBottom4of4">
             <volumeref ref="scintillatorVolume"/>
-            <position name="vetoBottom3of3Position" unit="mm" x="vetoBottomPosX + 1.5*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ"/>
+            <position name="vetoBottom3of3Position" unit="mm" x="vetoBottomPosX + 1.5*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ - shieldingOffset"/>
             <rotationref ref="vetoBottomRotation"/>
         </physvol>
         <!-- END veto bottom-->
@@ -271,17 +271,17 @@
         <!-- BEGIN veto east-->
         <physvol name="vetoEast1of3">
             <volumeref ref="scintillatorVolume"/>
-            <position name="vetoEast1of3Position" unit="mm" x="vetoEastPosX" y="vetoEastPosY - 1*scintillatorShortSide" z="vetoEastPosZ"/>
+            <position name="vetoEast1of3Position" unit="mm" x="vetoEastPosX" y="vetoEastPosY - 1*scintillatorShortSide" z="vetoEastPosZ - shieldingOffset"/>
             <rotationref ref="vetoEastRotation"/>
         </physvol>
         <physvol name="vetoEast2of3">
             <volumeref ref="scintillatorVolume"/>
-            <position name="vetoEast2of3Position" unit="mm" x="vetoEastPosX" y="vetoEastPosY + 0*scintillatorShortSide" z="vetoEastPosZ"/>
+            <position name="vetoEast2of3Position" unit="mm" x="vetoEastPosX" y="vetoEastPosY + 0*scintillatorShortSide" z="vetoEastPosZ - shieldingOffset"/>
             <rotationref ref="vetoEastRotation"/>
         </physvol>
         <physvol name="vetoEast3of3">
             <volumeref ref="scintillatorVolume"/>
-            <position name="vetoEast3of3Position" unit="mm" x="vetoEastPosX" y="vetoEastPosY  + 1*scintillatorShortSide" z="vetoEastPosZ"/>
+            <position name="vetoEast3of3Position" unit="mm" x="vetoEastPosX" y="vetoEastPosY  + 1*scintillatorShortSide" z="vetoEastPosZ - shieldingOffset"/>
             <rotationref ref="vetoEastRotation"/>
         </physvol>
         <!-- END veto east-->
@@ -289,17 +289,17 @@
         <!-- BEGIN veto west-->
         <physvol name="vetoWest1of3">
             <volumeref ref="scintillatorVolume"/>
-            <position name="vetoWest1of3Position" unit="mm" x="vetoWestPosX" y="vetoWestPosY - 1*scintillatorShortSide" z="vetoWestPosZ"/>
+            <position name="vetoWest1of3Position" unit="mm" x="vetoWestPosX" y="vetoWestPosY - 1*scintillatorShortSide" z="vetoWestPosZ - shieldingOffset"/>
             <rotationref ref="vetoWestRotation"/>
         </physvol>
         <physvol name="vetoWest2of3">
             <volumeref ref="scintillatorVolume"/>
-            <position name="vetoWest2of3Position" unit="mm" x="vetoWestPosX" y="vetoWestPosY + 0*scintillatorShortSide" z="vetoWestPosZ"/>
+            <position name="vetoWest2of3Position" unit="mm" x="vetoWestPosX" y="vetoWestPosY + 0*scintillatorShortSide" z="vetoWestPosZ - shieldingOffset"/>
             <rotationref ref="vetoWestRotation"/>
         </physvol>
         <physvol name="vetoWest3of3">
             <volumeref ref="scintillatorVolume"/>
-            <position name="vetoWest3of3Position" unit="mm" x="vetoWestPosX" y="vetoWestPosY  + 1*scintillatorShortSide" z="vetoWestPosZ"/>
+            <position name="vetoWest3of3Position" unit="mm" x="vetoWestPosX" y="vetoWestPosY  + 1*scintillatorShortSide" z="vetoWestPosZ - shieldingOffset"/>
             <rotationref ref="vetoWestRotation"/>
         </physvol>
         <!-- END veto west-->
