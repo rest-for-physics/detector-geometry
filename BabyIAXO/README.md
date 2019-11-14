@@ -21,3 +21,5 @@ As an example to remove the steel pipe we would just comment the following lines
 
 The different components of the geometry should be clearly labeled with a BEGIN and END comment in `Setup.gdml` and in a single block so that they can be turned on and off easily.
 
+![alt text](/miscellaneous/pictures/reference.JPG "BabyIAXO/reference@688356a3")
+![alt text](/miscellaneous/pictures/steel_pipe.JPG "BabyIAXO/with_steel_pipe@bf2eab49")
