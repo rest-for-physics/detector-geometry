@@ -51,6 +51,7 @@
         <variable name="mylarThickness" value="0.004" />
         <variable name="copperCathodeThickness" value="15" />
         <position name="mylarCathodePosition" unit="mm" x="0" y="0" z="chamberLength/2.-mylarThickness/2." />
+        <variable name="mylarCathodePositionZ" value="chamberLength/2.-mylarThickness/2." />
 
         <variable name="cathodePatternThickness" value="3" />
         <variable name="cathodePattern0Rad" value="4.25" />
@@ -426,20 +427,20 @@
         <tube name="teflonCylinder3of4" rmin="teflonPipeCylinder3of4Radius" rmax="teflonPipeCylinderOutterRadius" z="teflonPipeCylinder3of4Length" startphi="0" deltaphi="360" aunit="deg" lunit="mm" />
         <tube name="teflonCylinder4of4" rmin="teflonPipeCylinder4of4Radius" rmax="teflonPipeCylinderOutterRadius" z="teflonPipeCylinder4of4Length" startphi="0" deltaphi="360" aunit="deg" lunit="mm" />
 
-        <union name="teflonPipeSolid">
+        <union name="teflonPipeSolid_v1">
             <first ref="teflonCylinder1of4" />
             <second ref="teflonCylinder2of4" />
             <positionref ref="teflonCylinder2of4Position" />
         </union>
 
-        <union name="teflonPipeSolid">
-            <first ref="teflonPipeSolid" />
+        <union name="teflonPipeSolid_v2">
+            <first ref="teflonPipeSolid_v1" />
             <second ref="teflonCylinder3of4" />
             <positionref ref="teflonCylinder3of4Position" />
         </union>
 
         <union name="teflonPipeSolid">
-            <first ref="teflonPipeSolid" />
+            <first ref="teflonPipeSolid_v2" />
             <second ref="teflonCylinder4of4" />
             <positionref ref="teflonCylinder4of4Position" />
         </union>
@@ -448,42 +449,42 @@
         <tube name="copperPipeDetectorFlangeTube" rmin="0" rmax="copperPipeDetectorFlangeOutterRadius" z="copperPipeDetectorFlangeLength" startphi="0" deltaphi="360" aunit="deg" lunit="mm" />
         <tube name="copperPipeDetectorToCentralTube" rmin="0" rmax="copperPipeDetectorToCentralTubeOutterRadius" z="copperPipeDetectorToCentralTubeLength" startphi="0" deltaphi="360" aunit="deg" lunit="mm" />
 
-        <union name="copperPipeSolid">
+        <union name="copperPipeSolid_v1">
             <first ref="copperPipeDetectorFlangeTube" />
             <second ref="copperPipeDetectorToCentralTube" />
             <positionref ref="copperPipeUnion1Position" />
         </union>
 
-        <tube name="copperPipeCentralPieceSolid" rmin="0" rmax="copperPipeCentralPieceOutterRadius" z="copperPipeCentralPieceLength" startphi="0" deltaphi="360" aunit="deg" lunit="mm" />
-        <box name="copperPipeCentralPieceBox" x="copperPipeCentralPieceOutterRadius*2.1" y="copperPipeCentralPieceOutterRadius*2.1" z="copperPipeCentralPieceLength + 10" lunit="mm" />
+        <tube name="copperPipeCentralPieceSolid_v1" rmin="0" rmax="copperPipeCentralPieceOutterRadius" z="copperPipeCentralPieceLength" startphi="0" deltaphi="360" aunit="deg" lunit="mm" />
+        <box name="copperPipeCentralPieceBox_v1" x="copperPipeCentralPieceOutterRadius*2.1" y="copperPipeCentralPieceOutterRadius*2.1" z="copperPipeCentralPieceLength + 10" lunit="mm" />
         <box name="copperPipeCentralPieceBoxToSubs" x="copperPipeCentralPieceSquareSide" y="copperPipeCentralPieceSquareSide" z="copperPipeCentralPieceLength + 10" lunit="mm" />
         <subtraction name="copperPipeCentralPieceBox">
-            <first ref="copperPipeCentralPieceBox" />
+            <first ref="copperPipeCentralPieceBox_v1" />
             <second ref="copperPipeCentralPieceBoxToSubs" />
         </subtraction>
 
-        <subtraction name="copperPipeCentralPieceSolid">
-            <first ref="copperPipeCentralPieceSolid" />
+        <subtraction name="copperPipeCentralPieceSolid_v2">
+            <first ref="copperPipeCentralPieceSolid_v1" />
             <second ref="copperPipeCentralPieceBox" />
         </subtraction>
 
-        <union name="copperPipeSolid">
-            <first ref="copperPipeSolid" />
-            <second ref="copperPipeCentralPieceSolid" />
+        <union name="copperPipeSolid_v2">
+            <first ref="copperPipeSolid_v1" />
+            <second ref="copperPipeCentralPieceSolid_v2" />
             <positionref ref="copperPipeUnion2Position" />
         </union>
 
         <tube name="copperPipeCentralToOutTube" rmin="0" rmax="copperPipeCentralToOutTubeOutterRadius" z="copperPipeCentralToOutTubeLength" startphi="0" deltaphi="360" aunit="deg" lunit="mm" />
         <tube name="copperPipeOutFlangeTube" rmin="0" rmax="copperPipeOutFlangeOutterRadius" z="copperPipeOutFlangeLength" startphi="0" deltaphi="360" aunit="deg" lunit="mm" />
 
-        <union name="copperPipeSolid">
-            <first ref="copperPipeSolid" />
+        <union name="copperPipeSolid_v3">
+            <first ref="copperPipeSolid_v2" />
             <second ref="copperPipeCentralToOutTube" />
             <positionref ref="copperPipeUnion3Position" />
         </union>
 
-        <union name="copperPipeSolid">
-            <first ref="copperPipeSolid" />
+        <union name="copperPipeSolid_v4">
+            <first ref="copperPipeSolid_v3" />
             <second ref="copperPipeOutFlangeTube" />
             <positionref ref="copperPipeUnion4Position" />
         </union>
@@ -494,27 +495,27 @@
         <tube name="copperPipeInsideCylinder2Solid" rmin="0" rmax="copperPipeInsideCylinder2Radius" z="copperPipeInsideCylinder2Length" startphi="0" deltaphi="360" aunit="deg" lunit="mm" />
         <cone name="copperPipeInsideConeUnion2Solid" rmin1="0" rmax1="copperPipeInsideCylinder2Radius" rmin2="0" rmax2="copperPipeInsideCylinder3Radius" z="copperPipeInsideConeUnion2Length" startphi="0" deltaphi="360" aunit="deg" lunit="mm" />
 
-        <union name="copperPipeInsideSolid">
+        <union name="copperPipeInsideSolid_v1">
             <first ref="copperPipeInsideCylinder1Solid" />
             <second ref="copperPipeInsideConeUnion1Solid" />
             <positionref ref="copperPipeInnerUnion1Position" />
         </union>
 
-        <union name="copperPipeInsideSolid">
-            <first ref="copperPipeInsideSolid" />
+        <union name="copperPipeInsideSolid_v2">
+            <first ref="copperPipeInsideSolid_v1" />
             <second ref="copperPipeInsideCylinder2Solid" />
             <positionref ref="copperPipeInnerUnion2Position" />
         </union>
 
         <union name="copperPipeInsideSolid">
-            <first ref="copperPipeInsideSolid" />
+            <first ref="copperPipeInsideSolid_v2" />
             <second ref="copperPipeInsideConeUnion2Solid" />
             <positionref ref="copperPipeInnerUnion3Position" />
         </union>
 
         <!-- copper pipe outside - inner (final) -->
-        <subtraction name="copperPipeCentralPieceSolid">
-            <first ref="copperPipeSolid" />
+        <subtraction name="copperPipeCentralPieceSolid_v3">
+            <first ref="copperPipeSolid_v4" />
             <second ref="copperPipeInsideSolid" />
             <positionref ref="copperPipeOutterInnerSubsPosition" />
         </subtraction>
@@ -526,21 +527,21 @@
         </subtraction>
 
         <subtraction name="copperPipeCentralPieceSolid">
-            <first ref="copperPipeSolid" />
+            <first ref="copperPipeSolid_v4" />
             <second ref="copperPipeInsideSolid" />
             <positionref ref="copperPipeOutterInnerSubsPosition" />
         </subtraction>
 
         <tube name="teflonHoleSolid" rmin="0" rmax="teflonPipeCylinderOutterRadius" z="teflonPipeCylinderTotalLength" startphi="0" deltaphi="360" aunit="deg" lunit="mm" />
 
-        <subtraction name="copperPipeHollow">
-            <first ref="copperPipeSolid" />
+        <subtraction name="copperPipeHollowPre">
+            <first ref="copperPipeSolid_v4" />
             <second ref="teflonHoleSolid" />
             <positionref ref="copperPipeTeflonHoleSubsPosition" />
         </subtraction>
 
         <subtraction name="copperPipeHollow">
-            <first ref="copperPipeHollow" />
+            <first ref="copperPipeHollowPre" />
             <second ref="pipeFillingSolid" />
             <positionref ref="copperPipeOutterInnerSubsPosition" />
         </subtraction>
@@ -564,13 +565,13 @@
         <tube name="steelPipe1Flange1" rmin="steelPipeCylinder1OutterRadius" rmax="copperPipeOutFlangeOutterRadius" z="steelPipeFlangeHeigth" startphi="0" deltaphi="360" aunit="deg" lunit="mm" />
         <tube name="steelPipe1Flange2" rmin="steelPipeCylinder1OutterRadius" rmax="steelPipeCylinder2OutterRadius + steelPipeFlangeGenericRadiusOffset" z="steelPipeFlangeHeigth" startphi="0" deltaphi="360" aunit="deg" lunit="mm" />
 
-        <union name="steelPipe1WithFlange">
+        <union name="steelPipe1WithFlange_v1">
             <first ref="steelPipe1Tube" />
             <second ref="steelPipe1Flange1" />
             <positionref ref="steelPipe1Flange1Position" />
         </union>
         <union name="steelPipe1WithFlange">
-            <first ref="steelPipe1WithFlange" />
+            <first ref="steelPipe1WithFlange_v1" />
             <second ref="steelPipe1Flange2" />
             <positionref ref="steelPipe1Flange2Position" />
         </union>
@@ -580,13 +581,13 @@
         <tube name="steelPipe2Flange1" rmin="steelPipeCylinder2OutterRadius" rmax="steelPipeCylinder2OutterRadius + steelPipeFlangeGenericRadiusOffset" z="steelPipeFlangeHeigth" startphi="0" deltaphi="360" aunit="deg" lunit="mm" />
         <tube name="steelPipe2Flange2" rmin="steelPipeCylinder2OutterRadius" rmax="steelPipeCylinder3OutterRadius + steelPipeFlangeGenericRadiusOffset" z="steelPipeFlangeHeigth" startphi="0" deltaphi="360" aunit="deg" lunit="mm" />
 
-        <union name="steelPipe2WithFlange">
+        <union name="steelPipe2WithFlange_v1">
             <first ref="steelPipe2Tube" />
             <second ref="steelPipe2Flange1" />
             <positionref ref="steelPipe2Flange1Position" />
         </union>
         <union name="steelPipe2WithFlange">
-            <first ref="steelPipe2WithFlange" />
+            <first ref="steelPipe2WithFlange_v1" />
             <second ref="steelPipe2Flange2" />
             <positionref ref="steelPipe2Flange2Position" />
         </union>
@@ -596,13 +597,13 @@
         <tube name="steelPipe3Flange1" rmin="steelPipeCylinder3OutterRadius" rmax="steelPipeCylinder3OutterRadius + steelPipeFlangeGenericRadiusOffset" z="steelPipeFlangeHeigth" startphi="0" deltaphi="360" aunit="deg" lunit="mm" />
         <tube name="steelPipe3Flange2" rmin="steelPipeCylinder3OutterRadius" rmax="steelPipeCylinder3OutterRadius + steelPipeFlangeGenericRadiusOffset" z="steelPipeFlangeHeigth" startphi="0" deltaphi="360" aunit="deg" lunit="mm" />
 
-        <union name="steelPipe3WithFlange">
+        <union name="steelPipe3WithFlange_v1">
             <first ref="steelPipe3Tube" />
             <second ref="steelPipe3Flange1" />
             <positionref ref="steelPipe3Flange1Position" />
         </union>
         <union name="steelPipe3WithFlange">
-            <first ref="steelPipe3WithFlange" />
+            <first ref="steelPipe3WithFlange_v1" />
             <second ref="steelPipe3Flange2" />
             <positionref ref="steelPipe3Flange2Position" />
         </union>
@@ -613,17 +614,18 @@
         <cone name="steelPipeCone2" rmin1="steelPipeCone2InnerRadius1" rmax1="steelPipeCone2InnerRadius1 + steelPipeCone2Thickness" rmin2="steelPipeCone2InnerRadius2" rmax2="steelPipeCone2InnerRadius2 + steelPipeCone2Thickness" z="steelPipeCone2Length" startphi="0" deltaphi="360" aunit="deg" lunit="mm" />
 
         <!-- steel pipe complete -->
-        <union name="steelPipe">
+        <union name="steelPipe_v1">
             <first ref="steelPipe1WithFlange" />
             <second ref="steelPipe2WithFlange" />
             <positionref ref="steelPipe2WithRespectTo1Position" />
         </union>
         <union name="steelPipe">
-            <first ref="steelPipe" />
+            <first ref="steelPipe_v1" />
             <second ref="steelPipe3WithFlange" />
             <positionref ref="steelPipe3WithRespectTo1Position" />
         </union>
         <!-- 
+        CHECK NO REPEATING NAMES!
         <union name="steelPipe">
             <first ref="steelPipe" />
             <second ref="steelPipeCone1" />
@@ -642,13 +644,13 @@
         <cone name="steelPipeCone1Filling" rmin1="0" rmax1="steelPipeCone1InnerRadius1" rmin2="0" rmax2="steelPipeCone1InnerRadius2" z="steelPipeCone1Length" startphi="0" deltaphi="360" aunit="deg" lunit="mm" />
         <cone name="steelPipeCone2Filling" rmin1="0" rmax1="steelPipeCone2InnerRadius1" rmin2="0" rmax2="steelPipeCone2InnerRadius2" z="steelPipeCone2Length" startphi="0" deltaphi="360" aunit="deg" lunit="mm" />
 
-        <union name="steelPipeFilling">
+        <union name="steelPipeFilling_v1">
             <first ref="steelPipe1TubeFilling" />
             <second ref="steelPipe2TubeFilling" />
             <positionref ref="steelPipe2WithRespectTo1Position" />
         </union>
         <union name="steelPipeFilling">
-            <first ref="steelPipeFilling" />
+            <first ref="steelPipeFilling_v1" />
             <second ref="steelPipe3TubeFilling" />
             <positionref ref="steelPipe3WithRespectTo1Position" />
         </union>
@@ -778,14 +780,14 @@
     </structure>
     <!-- PIPE -->
     <structure>
-        <volume name="teflonPipe">
-            <materialref ref="PTFE" />
-            <solidref ref="teflonPipeSolid" />
-        </volume>
-
         <volume name="detectorCopperPipe">
             <materialref ref="Copper" />
             <solidref ref="copperPipeHollow" />
+        </volume>
+
+        <volume name="teflonPipeInCopper">
+            <materialref ref="PTFE" />
+            <solidref ref="teflonPipeSolid" />
         </volume>
 
         <volume name="pipeFilling">
@@ -802,7 +804,7 @@
     </structure>
     <!-- STEEL PIPE -->
     <structure>
-        <volume name="steelPipe">
+        <volume name="steelPipeVolume">
             <materialref ref="Stainlesssteel" />
             <solidref ref="steelPipe" />
         </volume>
@@ -869,7 +871,7 @@
 
             <physvol name="mylarCat">
                 <volumeref ref="mylarCathodeVolume" />
-                <positionref ref="mylarCathodePosition" unit="mm" x="0" y="0" z="chamberLength/2.-mylarThickness/2." />
+                <position name="mylarCathodePositionVolume" unit="mm" x="0" y="0" z="mylarCathodePositionZ" />
             </physvol>
 
             <physvol name="CuCathode">
@@ -899,7 +901,7 @@
             </physvol>
             <!-- PIPE -->
             <physvol name="DetectorTeflonPipe">
-                <volumeref ref="teflonPipe" />
+                <volumeref ref="teflonPipeInCopper" />
                 <position name="detectorTeflonPipePosition" unit="mm" x="0" y="0" z="copperPipeZInWorld + teflonWithRespectToPipeOffset" />
             </physvol>
 
@@ -919,12 +921,12 @@
             </physvol>
             <!-- STEEL PIPE -->
             <physvol name="SteelPipe">
-                <volumeref ref="steelPipe" />
+                <volumeref ref="steelPipeVolume" />
                 <position name="steelPipePosition" unit="mm" x="0" y="0" z="copperPipeZInWorld + steelPipeWithRespectToCopperPipeOffset" />
             </physvol>
             <physvol name="SteelPipeVacuum">
                 <volumeref ref="steelPipeVacuum" />
-                <position name="steelPipePosition" unit="mm" x="0" y="0" z="copperPipeZInWorld + steelPipeWithRespectToCopperPipeOffset" />
+                <position name="steelPipePositionVacuum" unit="mm" x="0" y="0" z="copperPipeZInWorld + steelPipeWithRespectToCopperPipeOffset" />
             </physvol>
             <!-- BEGIN VETOES -->
             <!-- BEGIN veto front-->
@@ -994,22 +996,22 @@
             <!-- BEGIN veto bottom-->
             <physvol name="vetoBottom1of4">
                 <volumeref ref="scintillatorVolume" />
-                <position name="vetoBottom1of3Position" unit="mm" x="vetoBottomPosX - 1.5*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ - shieldingOffset" />
+                <position name="vetoBottom1of4Position" unit="mm" x="vetoBottomPosX - 1.5*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ - shieldingOffset" />
                 <rotationref ref="vetoBottomRotation" />
             </physvol>
             <physvol name="vetoBottom2of4">
                 <volumeref ref="scintillatorVolume" />
-                <position name="vetoBottom2of3Position" unit="mm" x="vetoBottomPosX - 0.5*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ - shieldingOffset" />
+                <position name="vetoBottom2of4Position" unit="mm" x="vetoBottomPosX - 0.5*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ - shieldingOffset" />
                 <rotationref ref="vetoBottomRotation" />
             </physvol>
             <physvol name="vetoBottom3of4">
                 <volumeref ref="scintillatorVolume" />
-                <position name="vetoBottom3of3Position" unit="mm" x="vetoBottomPosX + 0.5*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ - shieldingOffset" />
+                <position name="vetoBottom3of4Position" unit="mm" x="vetoBottomPosX + 0.5*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ - shieldingOffset" />
                 <rotationref ref="vetoBottomRotation" />
             </physvol>
             <physvol name="vetoBottom4of4">
                 <volumeref ref="scintillatorVolume" />
-                <position name="vetoBottom3of3Position" unit="mm" x="vetoBottomPosX + 1.5*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ - shieldingOffset" />
+                <position name="vetoBottom4of4Position" unit="mm" x="vetoBottomPosX + 1.5*scintillatorShortSide" y="vetoBottomPosY" z="vetoBottomPosZ - shieldingOffset" />
                 <rotationref ref="vetoBottomRotation" />
             </physvol>
             <!-- END veto bottom-->
