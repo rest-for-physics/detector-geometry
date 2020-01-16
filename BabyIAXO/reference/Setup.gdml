@@ -14,7 +14,7 @@
         <constant name="degToRad" value="PI/180." />
 
         <!-- World -->
-        <constant name="world_size" value="1500" />
+        <constant name="world_size" value="3500" />
         <!-- try to keep that small to avoid interactions inside -->
 
         <!-- Target gas -->
