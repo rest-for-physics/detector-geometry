@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 
 <!DOCTYPE gdml [
-    <!ENTITY materials SYSTEM "../../../miscellaneous/materials.xml">
+    <!ENTITY materials SYSTEM "../../miscellaneous/materials.xml">
 ]>
 
 <gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
@@ -273,7 +273,7 @@
         <variable name="steelPipeZInWorld" value="0 + steelPipeCylinder1Length/2.0 - copperPipeDetectorFlangeLength/2.0" />
         <variable name="steelPipeLateral" value="0" />
 
-        <variable name="detectorDepth" value="50" />
+        <variable name="detectorDepth" value="400" />
     </define>
     <!-- ***END DEFINE*** -->
     <!-- ********************* -->
@@ -290,7 +290,7 @@
     <!-- FLUORESCENCE -->
     <solids>
         <!-- <box name="DetectorSolid" x="500" y="400" z="detectorDepth" lunit="mm" /> -->
-        <tube name="DetectorSolid" rmin="0" rmax="50" z="detectorDepth" startphi="0" deltaphi="360" aunit="deg" lunit="mm" />
+        <tube name="DetectorSolid" rmin="0" rmax="steelPipeCylinder1InnerRadius" z="detectorDepth" startphi="0" deltaphi="360" aunit="deg" lunit="mm" />
 
     </solids>
     <!-- PIPE -->
@@ -539,7 +539,7 @@
     <!-- FLUORESCENCE -->
     <structure>
         <volume name="DetectorVolume">
-            <materialref ref="G4_Pb" />
+            <materialref ref="Lead" />
             <solidref ref="DetectorSolid" />
         </volume>
 
@@ -554,7 +554,7 @@
 
         <volume name="detectorCopperPipe">
             <materialref ref="Copper" />
-            <solidref ref="copperPipeCentralPieceSolid" />
+            <solidref ref="copperPipeHollow" />
         </volume>
 
         <volume name="pipeFilling">
@@ -579,7 +579,7 @@
     <structure>
         <volume name="World">
             <!-- WORLD -->
-            <materialref ref="G4_Galactic" />
+            <materialref ref="Air" />
             <solidref ref="WorldSolid" />
             
             <!-- FLUORESCENCE -->
@@ -588,25 +588,26 @@
                 <position name="DetectorPosition" unit="mm" x="0" y="0" z="-1*detectorDepth/2 - 10" />
             </physvol>
 
-            <!-- PIPE-->
+            <!-- PIPE
+
 
             <physvol name="DetectorCopperPipe">
                 <volumeref ref="detectorCopperPipe" />
-                <position name="detectorCopperPipePosition" unit="mm" x="0*copperPipeLateral" y="0" z="copperPipeZInWorld" />
+                <position name="detectorCopperPipePosition" unit="mm" x="copperPipeLateral" y="0" z="copperPipeZInWorld" />
             </physvol>
-            
+
             <physvol name="DetectorTeflonPipe">
                 <volumeref ref="teflonPipe" />
-                <position name="detectorTeflonPipePosition" unit="mm" x="0*copperPipeLateral" y="0" z="copperPipeZInWorld + teflonWithRespectToPipeOffset" />
+                <position name="detectorTeflonPipePosition" unit="mm" x="copperPipeLateral" y="0" z="copperPipeZInWorld + teflonWithRespectToPipeOffset" />
             </physvol>
-        
+            
             <physvol name="PipeFilling">
                 <volumeref ref="pipeFilling" />
-                <position name="detectorFillingPipePosition" unit="mm" x="0*copperPipeLateral" y="0" z="copperPipeZInWorld + vacuumWithRespectToPipeOffset" />
+                <position name="detectorFillingPipePosition" unit="mm" x="copperPipeLateral" y="0" z="copperPipeZInWorld + vacuumWithRespectToPipeOffset" />
             </physvol>
-            
-            
-            <!-- STEEL PIPE 
+            -->
+
+            <!-- STEEL PIPE -->
             <physvol name="SteelPipe">
                 <volumeref ref="steelPipeVolume" />
                 <position name="steelPipePosition" unit="mm" x="steelPipeLateral" y="0" z="steelPipeZInWorld" />
@@ -615,7 +616,7 @@
                 <volumeref ref="steelPipeVacuum" />
                 <position name="steelPipeVacuumPosition" unit="mm" x="steelPipeLateral" y="0" z="steelPipeZInWorld" />
             </physvol>
-            -->
+            
         </volume>
     </structure>
     <!-- ***END STRUCTURE*** -->
@@ -626,6 +627,8 @@
     </setup>
     <!-- ***END SETUP*** -->
 
-</gdml><?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+</gdml>
+
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 
 
