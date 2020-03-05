@@ -683,7 +683,7 @@
             </union>
             -->
 
-        <tube name="scintillatorHoleCircular" x="scintillatorShortSide/2" y="scintillatorLongSide/2" z="scintillatorThickness*1.20" startphi="0" deltaphi="360" rmin="0" rmax="scintillatorHoleDiameter/2" aunit="deg" lunit="mm" />
+        <tube name="scintillatorHoleCircular" z="scintillatorThickness*1.20" startphi="0" deltaphi="360" rmin="0" rmax="scintillatorHoleDiameter/2" aunit="deg" lunit="mm" />
         <box name="scintillatorHoleSquare" x="scintillatorHoleDiameter" y="scintillatorHoleDiameter" z="scintillatorThickness*1.20" lunit="mm" />
         <subtraction name="scintillatorBoxSolidWithRightHole">
             <first ref="scintillatorBoxSolid" />
