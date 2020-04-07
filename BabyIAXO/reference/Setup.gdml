@@ -301,6 +301,7 @@
         <tube name="copperFlangeExt" startphi="0" deltaphi="360" rmin="copperFlangeHole" rmax="copperFlangeExtRad" z="copperFlangeThickness" aunit="deg" lunit="mm" />
         <tube name="teflonPipe" startphi="0" deltaphi="360" rmin="copperFlangeHole-teflonThickness" rmax="copperFlangeHole" z="pipeLength" aunit="deg" lunit="mm" />
         <tube name="teflonCoverCathode" startphi="0" deltaphi="360" rmin="copperFlangeHole-teflonThickness" rmax="cathodeHole" z="copperCathodeThickness+copperChamberTopThickness-cathodePatternThickness " aunit="deg" lunit="mm" />
+        <tube name="teflonCoverCathodeFilling" startphi="0" deltaphi="360" rmin="0" rmax="copperFlangeHole-teflonThickness" z="copperCathodeThickness+copperChamberTopThickness-cathodePatternThickness " aunit="deg" lunit="mm" />
         <tube name="VacuumPipe" startphi="0" deltaphi="360" rmin="0" rmax="copperFlangeHole-teflonThickness" z="copperCathodeThickness+copperChamberTopThickness-cathodePatternThickness+pipeLength" aunit="deg" lunit="mm" />
 
         <!-- Cathode Pattern -->
@@ -763,6 +764,11 @@
             <solidref ref="teflonCoverCathode" />
         </volume>
 
+        <volume name="teflonCoverCathodeFillingVolume">
+            <materialref ref="Vacuum" />
+            <solidref ref="teflonCoverCathodeFilling" />
+        </volume>
+
         <volume name="VacuumPipeVolume">
             <materialref ref="Vacuum" />
             <solidref ref="VacuumPipe" />
@@ -835,7 +841,7 @@
     <structure>
         <volume name="World">
             <!-- WORLD -->
-            <materialref ref="Air" />
+            <materialref ref="Vacuum" />
             <solidref ref="WorldSolid" />
             <!-- CHAMBER -->
             <physvol name="gas">
@@ -884,10 +890,14 @@
                 <position name="copperChamberTopPosition" unit="mm" x="0" y="0" z="chamberLength/2.+copperCathodeThickness+copperChamberTopThickness/2." />
             </physvol>
 
-
             <physvol name="PTFECoverCathode">
                 <volumeref ref="teflonCoverCathodeVolume" />
                 <position name="teflonCoverCathodePosition" unit="mm" x="0" y="0" z="chamberLength/2.+ cathodePatternThickness/2.+copperCathodeThickness/2.+copperChamberTopThickness/2." />
+            </physvol>
+
+            <physvol name="PTFECoverCathodeFilling">
+                <volumeref ref="teflonCoverCathodeFillingVolume" />
+                <position name="teflonCoverCathodeFillingPosition" unit="mm" x="0" y="0" z="chamberLength/2.+ cathodePatternThickness/2.+copperCathodeThickness/2.+copperChamberTopThickness/2." />
             </physvol>
 
             <physvol name="CuCathodePattern">
