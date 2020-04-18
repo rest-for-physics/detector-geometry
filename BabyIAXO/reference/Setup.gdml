@@ -561,7 +561,7 @@
         <box name="leadBoxSolid" x="leadBoxSizeXY" y="leadBoxSizeXY" z="leadBoxSizeZ" lunit="mm" />
         <box name="leadBoxShaft" x="leadBoxShaftShortSideX" y="leadBoxShaftShortSideY" z="leadBoxShaftLongSide" lunit="mm" />
 
-        <subtraction name="leadBoxWithShaftUnfinished">
+        <subtraction name="leadBoxWithShaft">
             <first ref="leadBoxSolid" />
             <second ref="leadBoxShaft" />
             <positionref ref="leadBoxShaftPosition" />
@@ -574,12 +574,6 @@
             <second ref="copperPipeSolid_v4" />
             <positionref ref="leadPipeCollarHollowSubstractionPosition" />
         </subtraction>
-
-        <union name="leadBoxWithShaft">
-            <first ref="leadBoxWithShaftUnfinished" />
-            <second ref="leadPipeCollarHollow" />
-            <positionref ref="leadPipeCollarPosition" />
-        </union>
     </solids>
     <!-- STEEL PIPE -->
     <solids>
@@ -697,13 +691,13 @@
         <tube name="photoMultiplierTube" z="scintillatorThickness" startphi="0" deltaphi="360" rmin="0" rmax="scintillatorThickness*0.4" aunit="deg" lunit="mm" />
 
         <!-- the following instruction can be used to draw the scintillator tube for display pourposes to check orientation and to take pictures, it should be commented on simulations -->
-        <!-- -->
+        <!-- 
         <union name="scintillatorBoxSolid">
             <first ref="scintillatorBoxSolid"/>
             <second ref="photoMultiplierTube"/>
             <rotation name="photoMultiplierTubeRotation" unit="deg" x="90" y="0" z="0"/>
             <position name="photoMultiplierTubePosition" x="0" y="scintillatorLongSide/2 + scintillatorThickness/2 - scintillatorLongSideNonSensitive" z="0" unit="mm"/>
-        </union>
+        </union>-->
 
         <tube name="scintillatorHoleCircular" z="scintillatorThickness*1.20" startphi="0" deltaphi="360" rmin="0" rmax="scintillatorHoleDiameter/2" aunit="deg" lunit="mm" />
         <box name="scintillatorHoleSquare" x="scintillatorHoleDiameter" y="scintillatorHoleDiameter" z="scintillatorThickness*1.20" lunit="mm" />
@@ -831,6 +825,10 @@
             <materialref ref="Lead" />
             <solidref ref="leadBoxWithShaft" />
         </volume>
+        <volume name="leadCollar">
+            <materialref ref="Lead" />
+            <solidref ref="leadPipeCollarHollow" />
+        </volume>
     </structure>
     <!-- STEEL PIPE -->
     <structure>
@@ -956,7 +954,12 @@
                 <volumeref ref="leadBoxVolume" />
                 <position name="leadBoxPosition" unit="mm" x="0 - detectorLateralOffset" y="0" z="0 - shieldingOffset" />
             </physvol>
-            <!-- STEEL PIPE -->
+
+            <physvol name="LeadCollar">
+                <volumeref ref="leadCollar" />
+                <position name="leadPipeCollarVolumePosition" x="0" y="0" z="- shieldingOffset + leadBoxSizeZ/2 + leadPipeCollarGap + leadPipeCollarThickness/2" unit="mm" />
+            </physvol>
+            <!-- STEEL PIPE 
             <physvol name="SteelPipe">
                 <volumeref ref="steelPipeVolume" />
                 <position name="steelPipePosition" unit="mm" x="0" y="0" z="copperPipeZInWorld + steelPipeWithRespectToCopperPipeOffset" />
@@ -964,7 +967,7 @@
             <physvol name="SteelPipeVacuum">
                 <volumeref ref="steelPipeVacuum" />
                 <position name="steelPipePositionVacuum" unit="mm" x="0" y="0" z="copperPipeZInWorld + steelPipeWithRespectToCopperPipeOffset" />
-            </physvol>
+            </physvol>-->
             <!-- BEGIN VETOES -->
             <!-- BEGIN veto front-->
             <physvol name="vetoFront1of3">
