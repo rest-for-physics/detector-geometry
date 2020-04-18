@@ -181,7 +181,19 @@
 
         <position name="leadPipeCollarPosition" x="0 + detectorLateralOffset" y="0" z="leadBoxSizeZ/2 + leadPipeCollarGap + leadPipeCollarThickness/2" unit="mm" />
 
-        <position name="leadPipeCollarHollowSubstractionPosition" x="0" y="0" z="-20" />
+        <position name="leadPipeCollarHollowSubstractionPosition" x="0" y="0" z="-200"  unit="mm" />
+    </define>
+    <!-- CONCRETE -->
+    <define>
+        <variable name="concreteOutterBoxSizeX" value="2300"/>
+        <variable name="concreteOutterBoxSizeY" value="1800"/>
+        <variable name="concreteOutterBoxSizeZ" value="1000"/>
+
+        <variable name="concreteInnerBoxSizeX" value="1300"/>
+        <variable name="concreteInnerBoxSizeY" value="1300"/>
+        <variable name="concreteInnerBoxSizeZ" value="1000"/>
+
+        <position name="concreteShieldingSubsPosition" x="0" y="-0.1 + concreteInnerBoxSizeY/2 - concreteOutterBoxSizeY/2" z="0"  unit="mm" />
     </define>
     <!-- STEEL TUBE -->
     <define>
@@ -575,6 +587,18 @@
             <positionref ref="leadPipeCollarHollowSubstractionPosition" />
         </subtraction>
     </solids>
+
+    <!-- CONCRETE -->
+    <solids>
+        <box name="concreteBox" x="concreteOutterBoxSizeX" y="concreteOutterBoxSizeY" z="concreteOutterBoxSizeZ" lunit="mm" />
+        <box name="concreteBoxSubs" x="concreteInnerBoxSizeX" y="concreteInnerBoxSizeY + 0.1" z="concreteInnerBoxSizeZ + 10" lunit="mm" />
+
+        <subtraction name="concreteShieldingSolid">
+            <first ref="concreteBox" />
+            <second ref="concreteBoxSubs" />
+            <positionref ref="concreteShieldingSubsPosition" />
+        </subtraction>
+    </solids>
     <!-- STEEL PIPE -->
     <solids>
         <!-- steel pipe segment 1 -->
@@ -830,6 +854,13 @@
             <solidref ref="leadPipeCollarHollow" />
         </volume>
     </structure>
+    <!-- CONCRETE -->
+    <structure>
+        <volume name="concreteShielding">
+            <materialref ref="Concrete" />
+            <solidref ref="concreteShieldingSolid" />
+        </volume>
+    </structure>
     <!-- STEEL PIPE -->
     <structure>
         <volume name="steelPipeVolume">
@@ -958,6 +989,11 @@
             <physvol name="LeadCollar">
                 <volumeref ref="leadCollar" />
                 <position name="leadPipeCollarVolumePosition" x="0" y="0" z="- shieldingOffset + leadBoxSizeZ/2 + leadPipeCollarGap + leadPipeCollarThickness/2" unit="mm" />
+            </physvol>
+            <!-- CONCRETE -->
+            <physvol name="ConcreteShielding">
+                <volumeref ref="concreteShielding" />
+                <position name="concreteShieldingPosition" unit="mm" x="0 - detectorLateralOffset" y="-150 + concreteOutterBoxSizeY/2 - leadBoxSizeXY/2" z="0 - shieldingOffset" />
             </physvol>
             <!-- STEEL PIPE 
             <physvol name="SteelPipe">
