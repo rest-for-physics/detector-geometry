@@ -32,7 +32,7 @@
         <variable name="chamberRadius" value="50" />
         <variable name="copperChamberThickness" value="18.5" />
         <variable name="teflonChamberThickness" value="2" />
-        <variable name="copperChamberTopThickness" value="17" />
+        <variable name="copperChamberTopThickness" value="2.5" />
         <variable name="copperChamberTopInnerRadius" value="30" />
 
         <!-- Readout -->
@@ -157,7 +157,7 @@
         <variable name="teflonWithRespectToPipeOffset" value="teflonPipeCylinder1of4Length/2.0 - copperPipeDetectorFlangeLength/2.0" />
         <variable name="vacuumWithRespectToPipeOffset" value="copperPipeInsideCylinder1Length/2.0 - copperPipeDetectorFlangeLength/2.0 - copperPipeInsideOffset" />
 
-        <variable name="copperPipeZInWorld" value="chamberLength/2. + copperCathodeThickness + copperChamberTopThickness/2. + copperPipeDetectorFlangeLength" />
+        <variable name="copperPipeZInWorld" value="chamberLength/2. + copperCathodeThickness + copperChamberTopThickness + copperPipeDetectorFlangeLength/2" />
         <position name="copperPipeTeflonHoleSubsPosition" unit="mm" x="0" y="0" z="teflonPipeCylinderTotalLength / 2 - copperPipeDetectorFlangeLength/2.0" />
 
     </define>
@@ -265,12 +265,12 @@
 
         <variable name="vetoBackPosX" value="0 - detectorLateralOffset" />
         <variable name="vetoBackPosY" value="0.5*scintillatorLongSide - 1.5*scintillatorShortSide" />
-        <variable name="vetoBackPosZ" value="-1.5*scintillatorShortSide - scintillatorThickness/2 - scintillatorThickness/2" />
+        <variable name="vetoBackPosZ" value="-1.5*scintillatorShortSide" />
         <rotation name="vetoBackRotation" unit="deg" x="0" y="0" z="0" />
 
         <variable name="vetoTopPosX" value="0 - detectorLateralOffset" />
         <variable name="vetoTopPosY" value="leadBoxSizeXY / 2 + scintillatorThickness/2 + 5" />
-        <variable name="vetoTopPosZ" value="-scintillatorThickness/2" />
+        <variable name="vetoTopPosZ" value="+scintillatorThickness/2" />
         <rotation name="vetoTopRotation" unit="deg" x="90" y="0" z="90" />
 
         <variable name="vetoBottomPosX" value="0 - detectorLateralOffset" />
@@ -990,11 +990,11 @@
                 <volumeref ref="leadCollar" />
                 <position name="leadPipeCollarVolumePosition" x="0" y="0" z="- shieldingOffset + leadBoxSizeZ/2 + leadPipeCollarGap + leadPipeCollarThickness/2" unit="mm" />
             </physvol>
-            <!-- CONCRETE -->
+            <!-- CONCRETE 
             <physvol name="ConcreteShielding">
                 <volumeref ref="concreteShielding" />
                 <position name="concreteShieldingPosition" unit="mm" x="0 - detectorLateralOffset" y="-150 + concreteOutterBoxSizeY/2 - leadBoxSizeXY/2" z="0 - shieldingOffset" />
-            </physvol>
+            </physvol> -->
             <!-- STEEL PIPE 
             <physvol name="SteelPipe">
                 <volumeref ref="steelPipeVolume" />
