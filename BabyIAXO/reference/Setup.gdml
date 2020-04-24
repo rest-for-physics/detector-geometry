@@ -173,7 +173,7 @@
         <position name="leadBoxShaftPosition" x="0" y="0" z="1 + leadBoxSizeZ/2 - leadBoxShaftLongSide/2 " unit="mm" />
 
         <variable name="detectorToShieldingSeparation" value="-60" />
-        <variable name="shieldingOffset" value="-leadBoxShaftShortSide/2.0 + detectorToShieldingSeparation + chamberLength/2. + backplateThickness" />
+        <variable name="shieldingOffset" value="detectorToShieldingSeparation + chamberLength/2.0 + backplateThickness" />
         <variable name="detectorLateralOffset" value="-10.7"/>
 
         <variable name="leadPipeCollarThickness" value="50"/>
@@ -248,10 +248,12 @@
         <variable name="scintillatorThickness" value="50" />
         <variable name="scintillatorLongSide" value="700" />
         <variable name="scintillatorShortSide" value="200" />
-        <variable name="scintillatorHoleDiameter" value="200 + scintillatorLongSideNonSensitive" />
 
         <variable name="scintillatorLongSideNonSensitive" value="0.1" />
         <variable name="scintillatorShortSideNonSensitive" value="0.1" />
+
+        <variable name="scintillatorHoleDiameter" value="200 + scintillatorLongSideNonSensitive" />
+
         <!-- TODO: explanation of "non sensitive" -->
 
         <position name="scintillatorBoxSolidWithHoleRightHolePosition" x="scintillatorShortSide/2" y="-100" z="0" unit="mm" />
