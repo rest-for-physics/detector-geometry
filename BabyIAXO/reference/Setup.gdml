@@ -1013,7 +1013,7 @@
                 <position name="vetoFront1of3Position" unit="mm" x="vetoFrontPosX" y="vetoFrontPosY  - 1*scintillatorShortSide" z="vetoFrontPosZ - shieldingOffset" />
                 <rotationref ref="vetoFrontRotation" />
             </physvol>
-            <physvol name="vetoFront2of4">
+            <physvol name="vetoFront2of3">
                 <volumeref ref="scintillatorVolumeWithMiddleHole" />
                 <position name="vetoFront2of3Position" unit="mm" x="vetoFrontPosX" y="vetoFrontPosY  - 0*scintillatorShortSide" z="vetoFrontPosZ - shieldingOffset" />
                 <rotationref ref="vetoFrontRotation" />
