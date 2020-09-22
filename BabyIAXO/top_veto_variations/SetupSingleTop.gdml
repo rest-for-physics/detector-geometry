@@ -298,7 +298,6 @@
 
 
         <variable name="leadBoxTopSizeY" value="vetoInsertDepth" />
-        <variable name="vetoSandwichThickness" value="3*scintillatorThickness + 2*scintillatorSheetMiddleThickness" />
 
     </define>
     <!-- ***END DEFINE*** -->
@@ -755,7 +754,6 @@
             <second ref="scintillatorHoleSquare" />
         </subtraction>
 
-        <box name="scintillatorSheetMiddleBoxSolid" x="3*scintillatorShortSide-2*scintillatorShortSideNonSensitive" y="scintillatorLongSide-2*scintillatorLongSideNonSensitive" z="scintillatorSheetMiddleThickness" lunit="mm" />
         <box name="scintillatorSheetLastBoxSolid" x="3*scintillatorShortSide-2*scintillatorShortSideNonSensitive" y="scintillatorLongSide-2*scintillatorLongSideNonSensitive" z="scintillatorSheetLastThickness" lunit="mm" />
 
     </solids>
