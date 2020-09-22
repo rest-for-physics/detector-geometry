@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <!-- ##VERSION BabyIAXO Top Veto Variations: Double - Version 1.0 (${scintillatorSheetMiddleThickness} ${scintillatorSheetMiddleMaterial} ${scintillatorSheetLastThickness} ${scintillatorSheetLastMaterial})## -->
-<!-- <!ENTITY materials SYSTEM "http://sultan.unizar.es/materials/materials.xml"> -->
 
 <!DOCTYPE gdml [
     <!ENTITY materials SYSTEM "../../miscellaneous/materials.xml"> 
@@ -297,10 +296,6 @@
         <variable name="vetoEastPosZ" value="vetoFrontPosZ - scintillatorThickness/2 - scintillatorLongSide/2" />
         <rotation name="vetoEastRotation" unit="deg" x="90" y="90" z="0" />
 
-
-        <variable name="leadBoxTopSizeY" value="vetoInsertDepth" />
-        <variable name="vetoSandwichThickness" value="3*scintillatorThickness + 2*scintillatorSheetMiddleThickness" />
-
     </define>
     <!-- ***END DEFINE*** -->
     <!-- ********************* -->
@@ -586,7 +581,6 @@
     <solids>
         <box name="leadBoxSolid" x="leadBoxSizeXY" y="leadBoxSizeXY - vetoInsertDepth" z="leadBoxSizeZ" lunit="mm" />
         <box name="leadBoxShaft" x="leadBoxShaftShortSideX" y="leadBoxShaftShortSideY" z="leadBoxShaftLongSide" lunit="mm" />
-        <box name="leadBoxTop" x="leadBoxSizeXY" y="leadBoxTopSizeY" z="leadBoxSizeZ" lunit="mm" />
 
         <subtraction name="leadBoxWithShaft">
             <first ref="leadBoxSolid" />
@@ -872,10 +866,7 @@
             <materialref ref="Lead" />
             <solidref ref="leadPipeCollarHollow" />
         </volume>
-        <volume name="leadTopVolume">
-            <materialref ref="Lead" />
-            <solidref ref="leadBoxTop" />
-        </volume>
+
     </structure>
     <!-- CONCRETE -->
     <structure>
@@ -1018,11 +1009,7 @@
                 <volumeref ref="leadBoxVolume" />
                 <position name="leadBoxPosition" unit="mm" x="0 - detectorLateralOffset" y="0 - vetoInsertDepth/2" z="0 - shieldingOffset" />
             </physvol>
-            <!--
-            <physvol name="LeadShieldingTop">
-                <volumeref ref="leadTopVolume" />
-                <position name="leadBoxPosition" unit="mm" x="0 - detectorLateralOffset" y="0 - vetoInsertDepth/2 + (leadBoxSizeXY - vetoInsertDepth)/2 - leadBoxTopSizeY/2 + leadBoxTopSizeY + vetoSandwichThickness" z="0 - shieldingOffset" />
-            </physvol>-->
+
             <physvol name="LeadCollar">
                 <volumeref ref="leadCollar" />
                 <position name="leadPipeCollarVolumePosition" x="0" y="0" z="- shieldingOffset + leadBoxSizeZ/2 + leadPipeCollarGap + leadPipeCollarThickness/2" unit="mm" />
