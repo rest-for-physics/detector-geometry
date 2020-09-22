@@ -70,8 +70,14 @@
     <element name="Nickel" formula="Ni" Z="28" state="solid">
         <atom value="58.6934" />
     </element>
+    <element name="Cd" formula="Cd" Z="48" state="solid">
+        <atom value="112.414" />
+    </element>
     <element name="Xenon" formula="Xe" Z="54" state="gas">
         <atom value="131.293" />
+    </element>
+    <element name="Gd" formula="Gd" Z="64" state="solid">
+        <atom value="157.25" />
     </element>
     <!-- }}} ...............................................................................-->
 
@@ -202,8 +208,8 @@
     </material>
     <!-- }}} ...............................................................................-->
 
-    <!-- {{{ Stainlesssteel ................................................................-->
-    <material name="Stainlesssteel" state="solid">
+    <!-- {{{ StainlessSteel ................................................................-->
+    <material name="StainlessSteel" state="solid">
         <MEE unit="eV" value="280.927567486627"/>
         <D unit="g/cm3" value="8.02"/>
         <fraction n="0.02" ref="Manganese"/>
@@ -213,6 +219,24 @@
         <fraction n="0.68" ref="Iron"/>
     </material>
     <!-- }}} ...............................................................................-->
+
+
+    <!-- {{{ Gadolinium ................................................................-->
+    <material name="Gadolinium" state="solid">
+        <MEE unit="eV" value="591.000000"/>
+        <D unit="g/cm3" value="7.90040"/>
+        <fraction n="1" ref="Gd"/>
+    </material>
+    <!-- }}} ...............................................................................-->
+
+    <!-- {{{ Cadmium ................................................................-->
+    <material name="Cadmium" state="solid">
+        <MEE unit="eV" value="469.000000"/>
+        <D unit="g/cm3" value="8.65000"/>
+        <fraction n="1" ref="Cd"/>
+    </material>
+    <!-- }}} ...............................................................................-->
+
 
     <!-- {{{ Air http://pml.nist.gov/cgi-bin/Star/compos.pl?matno=104 ?? ...................-->
     <isotope N="14" Z="7" name="N14">

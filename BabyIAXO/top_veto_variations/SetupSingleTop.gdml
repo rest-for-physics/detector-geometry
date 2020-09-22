@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!-- ##VERSION BabyIAXO Top Veto Variations: Single - Version 1.0 (${scintillatorSheetLastThickness} ${scintillatorSheetLastMaterial})## -->
+<!-- <!ENTITY materials SYSTEM "http://sultan.unizar.es/materials/materials.xml"> -->
 
 <!DOCTYPE gdml [
-    <!ENTITY materials SYSTEM "../materials.xml">
+    <!ENTITY materials SYSTEM "../../miscellaneous/materials.xml"> 
 ]>
 
 <gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
@@ -28,7 +30,7 @@
     <!-- CHAMBER -->
     <define>
         <!-- VETOES EXTRA vetoInsertDepth fixed at 0-->
-        <variable name="scintillatorSheetLastThickness" value="200" />
+        <variable name="scintillatorSheetLastThickness" value="${scintillatorSheetLastThickness}" />
 
         <variable name="vetoInsertDepth" value="0" />
         <!-- Chamber -->
@@ -913,7 +915,7 @@
         </volume>
 
         <volume name="scintillatorSheetLastVolume">
-            <materialref ref="Vacuum" />
+            <materialref ref="${scintillatorSheetLastMaterial}" />
             <solidref ref="scintillatorSheetLastBoxSolid" />
         </volume> 
 
