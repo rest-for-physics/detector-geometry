@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!-- ##VERSION BabyIAXO Top Veto Variations: In Between - Version 1.0 (${vetoInsertDepth} ${scintillatorSheetMiddleThickness} ${scintillatorSheetMiddleMaterial} ${scintillatorSheetLastThickness} ${scintillatorSheetLastMaterial})## -->
 
 <!DOCTYPE gdml [
     <!ENTITY materials SYSTEM "../materials.xml">
