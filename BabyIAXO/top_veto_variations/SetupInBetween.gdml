@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<!-- ##VERSION BabyIAXO Top Veto Variations: In Between - Version 1.0 (${vetoInsertDepth} ${scintillatorSheetMiddleThickness} ${scintillatorSheetMiddleMaterial} ${scintillatorSheetLastThickness} ${scintillatorSheetLastMaterial})## -->
 
 <!DOCTYPE gdml [
-    <!ENTITY materials SYSTEM "../../miscellaneous/materials.xml">
+    <!ENTITY materials SYSTEM "../materials.xml">
 ]>
 
 <gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
@@ -27,6 +28,9 @@
     </define>
     <!-- CHAMBER -->
     <define>
+        <!-- VETOES EXTRA vetoInsertDepth from 5 to 190-->
+        <variable name="scintillatorSheetMiddleThickness" value="${scintillatorSheetMiddleThickness}" />
+        <variable name="vetoInsertDepth" value="${vetoInsertDepth}" />
         <!-- Chamber -->
         <variable name="chamberLength" value="30" />
         <variable name="chamberRadius" value="50" />
@@ -170,7 +174,7 @@
         <variable name="leadBoxShaftLongSide" value="340 + 1" />
         <!-- we add an offset to make sure the substraction is done correctly -->
 
-        <position name="leadBoxShaftPosition" x="0" y="0" z="1 + leadBoxSizeZ/2 - leadBoxShaftLongSide/2 " unit="mm" />
+        <position name="leadBoxShaftPosition" x="0" y="vetoInsertDepth/2" z="1 + leadBoxSizeZ/2 - leadBoxShaftLongSide/2 " unit="mm" />
 
         <variable name="detectorToShieldingSeparation" value="-60" />
         <variable name="shieldingOffset" value="detectorToShieldingSeparation + chamberLength/2.0 + backplateThickness" />
@@ -271,7 +275,7 @@
         <rotation name="vetoBackRotation" unit="deg" x="0" y="0" z="0" />
 
         <variable name="vetoTopPosX" value="0 - detectorLateralOffset" />
-        <variable name="vetoTopPosY" value="leadBoxSizeXY / 2 + scintillatorThickness/2 + 5" />
+        <variable name="vetoTopPosY" value="leadBoxSizeXY / 2 + scintillatorThickness/2 + 5 - vetoInsertDepth - 5" />
         <variable name="vetoTopPosZ" value="+scintillatorThickness/2" />
         <rotation name="vetoTopRotation" unit="deg" x="90" y="0" z="90" />
 
@@ -289,6 +293,11 @@
         <variable name="vetoEastPosY" value="0" />
         <variable name="vetoEastPosZ" value="vetoFrontPosZ - scintillatorThickness/2 - scintillatorLongSide/2" />
         <rotation name="vetoEastRotation" unit="deg" x="90" y="90" z="0" />
+
+
+        <variable name="leadBoxTopSizeY" value="vetoInsertDepth" />
+        <variable name="vetoSandwichThickness" value="3*scintillatorThickness + 2*scintillatorSheetMiddleThickness" />
+
     </define>
     <!-- ***END DEFINE*** -->
     <!-- ********************* -->
@@ -569,11 +578,12 @@
         <second ref="pipeFillingSolid" />
         <positionref ref="copperPipeOutterInnerSubsPosition" />
     </subtraction>
-</solids>
+    </solids>
     <!-- SHIELDING -->
     <solids>
-        <box name="leadBoxSolid" x="leadBoxSizeXY" y="leadBoxSizeXY" z="leadBoxSizeZ" lunit="mm" />
+        <box name="leadBoxSolid" x="leadBoxSizeXY" y="leadBoxSizeXY - vetoInsertDepth" z="leadBoxSizeZ" lunit="mm" />
         <box name="leadBoxShaft" x="leadBoxShaftShortSideX" y="leadBoxShaftShortSideY" z="leadBoxShaftLongSide" lunit="mm" />
+        <box name="leadBoxTop" x="leadBoxSizeXY" y="leadBoxTopSizeY" z="leadBoxSizeZ" lunit="mm" />
 
         <subtraction name="leadBoxWithShaft">
             <first ref="leadBoxSolid" />
@@ -742,6 +752,9 @@
             <first ref="scintillatorBoxSolid" />
             <second ref="scintillatorHoleSquare" />
         </subtraction>
+
+        <box name="scintillatorSheetMiddleBoxSolid" x="3*scintillatorShortSide-2*scintillatorShortSideNonSensitive" y="scintillatorLongSide-2*scintillatorLongSideNonSensitive" z="scintillatorSheetMiddleThickness" lunit="mm" />
+
     </solids>
     <!-- ***END SOLIDS*** -->
     <!-- ********************* -->
@@ -855,6 +868,10 @@
             <materialref ref="Lead" />
             <solidref ref="leadPipeCollarHollow" />
         </volume>
+        <volume name="leadTopVolume">
+            <materialref ref="Lead" />
+            <solidref ref="leadBoxTop" />
+        </volume>
     </structure>
     <!-- CONCRETE -->
     <structure>
@@ -866,7 +883,7 @@
     <!-- STEEL PIPE -->
     <structure>
         <volume name="steelPipeVolume">
-            <materialref ref="Stainlesssteel" />
+            <materialref ref="StainlessSteel" />
             <solidref ref="steelPipe" />
         </volume>
         <volume name="steelPipeVacuum">
@@ -893,6 +910,12 @@
             <materialref ref="BC408" />
             <solidref ref="scintillatorBoxSolidWithLeftHole" />
         </volume>
+
+
+        <volume name="scintillatorSheetMiddleVolume">
+            <materialref ref="${scintillatorSheetMiddleMaterial}" />
+            <solidref ref="scintillatorSheetMiddleBoxSolid" />
+        </volume> 
 
     </structure>
     <!-- WORLD (physical volumes) -->
@@ -985,9 +1008,12 @@
             <!-- SHIELDING -->
             <physvol name="LeadShielding">
                 <volumeref ref="leadBoxVolume" />
-                <position name="leadBoxPosition" unit="mm" x="0 - detectorLateralOffset" y="0" z="0 - shieldingOffset" />
+                <position name="leadBoxPosition" unit="mm" x="0 - detectorLateralOffset" y="0 - vetoInsertDepth/2" z="0 - shieldingOffset" />
             </physvol>
-
+            <physvol name="LeadShieldingTop">
+                <volumeref ref="leadTopVolume" />
+                <position name="leadBoxPosition" unit="mm" x="0 - detectorLateralOffset" y="0 - vetoInsertDepth/2 + (leadBoxSizeXY - vetoInsertDepth)/2 - leadBoxTopSizeY/2 + leadBoxTopSizeY + vetoSandwichThickness" z="0 - shieldingOffset" />
+            </physvol>
             <physvol name="LeadCollar">
                 <volumeref ref="leadCollar" />
                 <position name="leadPipeCollarVolumePosition" x="0" y="0" z="- shieldingOffset + leadBoxSizeZ/2 + leadPipeCollarGap + leadPipeCollarThickness/2" unit="mm" />
@@ -1018,11 +1044,13 @@
                 <position name="vetoFront2of3Position" unit="mm" x="vetoFrontPosX" y="vetoFrontPosY  - 0*scintillatorShortSide" z="vetoFrontPosZ - shieldingOffset" />
                 <rotationref ref="vetoFrontRotation" />
             </physvol>
+            <!--
             <physvol name="vetoFront3of3">
                 <volumeref ref="scintillatorVolume" />
                 <position name="vetoFront3of3Position" unit="mm" x="vetoFrontPosX" y="vetoFrontPosY  + 1*scintillatorShortSide" z="vetoFrontPosZ - shieldingOffset" />
                 <rotationref ref="vetoFrontRotation" />
             </physvol>
+            -->
 
             <!-- END veto front-->
 
@@ -1061,6 +1089,59 @@
                 <rotationref ref="vetoTopRotation" />
             </physvol>
 
+
+
+            <physvol name="scintillatorSheetMiddleFirst">
+                <volumeref ref="scintillatorSheetMiddleVolume" />
+                <position name="scintillatorSheetMiddleFirstPosition" unit="mm" x="vetoTopPosX" y="vetoTopPosY + scintillatorThickness/2 + scintillatorSheetMiddleThickness/2" z="vetoTopPosZ - shieldingOffset" />
+                <rotationref ref="vetoTopRotation" />
+            </physvol>
+
+            <physvol name="vetoTopMiddle1of3">
+                <volumeref ref="scintillatorVolume" />
+                <position name="vetoTopMiddle1of3Position" unit="mm" x="vetoTopPosX" y="vetoTopPosY + scintillatorSheetMiddleThickness + scintillatorThickness" z="vetoTopPosZ - shieldingOffset - 1*scintillatorShortSide" />
+                <rotationref ref="vetoTopRotation" />
+            </physvol>
+            <physvol name="vetoTopMiddle2of3">
+                <volumeref ref="scintillatorVolume" />
+                <position name="vetoTopMiddle2of3Position" unit="mm" x="vetoTopPosX" y="vetoTopPosY + scintillatorSheetMiddleThickness + scintillatorThickness" z="vetoTopPosZ - shieldingOffset - 0*scintillatorShortSide" />
+                <rotationref ref="vetoTopRotation" />
+            </physvol>
+            <physvol name="vetoTopMiddle3of3">
+                <volumeref ref="scintillatorVolume" />
+                <position name="vetoTopMiddle3of3Position" unit="mm" x="vetoTopPosX" y="vetoTopPosY + scintillatorSheetMiddleThickness + scintillatorThickness" z="vetoTopPosZ - shieldingOffset + 1*scintillatorShortSide" />
+                <rotationref ref="vetoTopRotation" />
+            </physvol>
+
+            <physvol name="scintillatorSheetMiddleLast">
+                <volumeref ref="scintillatorSheetMiddleVolume" />
+                <position name="scintillatorSheetMiddleLastPosition" unit="mm" x="vetoTopPosX" y="vetoTopPosY + 3*scintillatorThickness/2 + 3*scintillatorSheetMiddleThickness/2" z="vetoTopPosZ - shieldingOffset" />
+                <rotationref ref="vetoTopRotation" />
+            </physvol>
+
+            <physvol name="vetoTopLast1of3">
+                <volumeref ref="scintillatorVolume" />
+                <position name="vetoTopLast1of3Position" unit="mm" x="vetoTopPosX" y="vetoTopPosY + 2*scintillatorSheetMiddleThickness + 2*scintillatorThickness" z="vetoTopPosZ - shieldingOffset - 1*scintillatorShortSide" />
+                <rotationref ref="vetoTopRotation" />
+            </physvol>
+            <physvol name="vetoTopLast2of3">
+                <volumeref ref="scintillatorVolume" />
+                <position name="vetoTopLast2of3Position" unit="mm" x="vetoTopPosX" y="vetoTopPosY  + 2*scintillatorSheetMiddleThickness + 2*scintillatorThickness" z="vetoTopPosZ - shieldingOffset - 0*scintillatorShortSide" />
+                <rotationref ref="vetoTopRotation" />
+            </physvol>
+            <physvol name="vetoTopLast3of3">
+                <volumeref ref="scintillatorVolume" />
+                <position name="vetoTopLast3of3Position" unit="mm" x="vetoTopPosX" y="vetoTopPosY  + 2*scintillatorSheetMiddleThickness + 2*scintillatorThickness" z="vetoTopPosZ - shieldingOffset + 1*scintillatorShortSide" />
+                <rotationref ref="vetoTopRotation" />
+            </physvol>
+
+            <!--
+            <physvol name="scintillatorSheetLast">
+                <volumeref ref="scintillatorSheetLastVolume" />
+                <position name="scintillatorSheetLastPosition" unit="mm" x="vetoTopPosX" y="vetoTopPosY + 5*scintillatorThickness/2 + 4*scintillatorSheetMiddleThickness/2 + scintillatorSheetLastThickness/2" z="vetoTopPosZ - shieldingOffset" />
+                <rotationref ref="vetoTopRotation" />
+            </physvol>
+            -->
             <!-- END veto top-->
 
             <!-- BEGIN veto bottom -->
@@ -1093,11 +1174,13 @@
                 <position name="vetoEast2of3Position" unit="mm" x="vetoEastPosX" y="vetoEastPosY + 0*scintillatorShortSide" z="vetoEastPosZ - shieldingOffset" />
                 <rotationref ref="vetoEastRotation" />
             </physvol>
+            <!--
             <physvol name="vetoEast3of3">
                 <volumeref ref="scintillatorVolume" />
                 <position name="vetoEast3of3Position" unit="mm" x="vetoEastPosX" y="vetoEastPosY  + 1*scintillatorShortSide" z="vetoEastPosZ - shieldingOffset" />
                 <rotationref ref="vetoEastRotation" />
             </physvol>
+            -->
             <!-- END veto east-->
 
             <!-- BEGIN veto west -->
@@ -1111,11 +1194,13 @@
                 <position name="vetoWest2of3Position" unit="mm" x="vetoWestPosX" y="vetoWestPosY + 0*scintillatorShortSide" z="vetoWestPosZ - shieldingOffset" />
                 <rotationref ref="vetoWestRotation" />
             </physvol>
+            <!--
             <physvol name="vetoWest3of3">
                 <volumeref ref="scintillatorVolume" />
                 <position name="vetoWest3of3Position" unit="mm" x="vetoWestPosX" y="vetoWestPosY  + 1*scintillatorShortSide" z="vetoWestPosZ - shieldingOffset" />
                 <rotationref ref="vetoWestRotation" />
             </physvol>
+            -->
             <!-- END veto west-->
             <!-- END VETOES -->
             
