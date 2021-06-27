@@ -1,3 +1,4 @@
 *.gdml_
 *.root
+!*.gdml.root
 .vscode

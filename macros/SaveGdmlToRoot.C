@@ -10,7 +10,7 @@ void SaveGdmlToRoot(string filename="Setup.gdml", bool checkOverlaps=false){
     string outputFilename = filename + ".root";
     cout << "Writing geometry to: " << outputFilename << endl;
     TFile file(outputFilename.c_str(), "UPDATE");
-    gGeoManager->Write("geo");
+    gGeoManager->Write("Geometry");
     file.Close();
 
 }
