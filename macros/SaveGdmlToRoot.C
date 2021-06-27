@@ -12,5 +12,4 @@ void SaveGdmlToRoot(string filename="Setup.gdml", bool checkOverlaps=false){
     TFile file(outputFilename.c_str(), "UPDATE");
     gGeoManager->Write("Geometry");
     file.Close();
-
 }
