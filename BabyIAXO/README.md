@@ -1,25 +1,5 @@
-The structure of the geometry is divided in a set of mostly independent `.GDML` files. This is done in order to avoid working with an extremely large file. However one has to be careful as there can be dependances between files (e.g. steel pipe file can look for a value defined in copper pipe file) so the order in which they are imported in the main `Setup` file critical and should not be altered.
+Currently we're experimenting with using [gdml.kt](https://github.com/mipt-npm/gdml.kt) to generate the GDML files.
+The GDML files would be generated from a Kotlin script (currently `main.kt`) that is easily configurable and human readable. All the GDML files inside the `gdml.kt` directory are produced using this kotlin file using different parameters.
 
-The goal of this structure is to have one main file which we called `Setup.gdml` in which only the most important parameters are defined and where only the physical volumes are defined so that if for example we would like to work without the steel pipe we would just comment a single, small block of code to remove them with all references to the steel pipe contained in this compact block.
+It is not requiered for the users of this repository to use this tool to generate the files, they will be available in this repository as plain GDML files, which should be self contained (not referencing other XML files). All geometries are (currently only manually) tested for overlaps and other glitches, but the final user should do a basic check to see if there are any issues with the geometry. There are some macros provided that can be used for this.
 
-As an example to remove the steel pipe we would just comment the following lines in `Setup.gdml`:
-
-```
-...
-<!-- BEGIN STEEL PIPE -->
-<physvol name="steelPipe">
-    <volumeref ref="steelPipe"/>
-    <position name="steelPipePosition" unit="mm" x="0" y="0" z="copperPipeZInWorld + steelPipeWithRespectToCopperPipeOffset"/>
-</physvol>
-<physvol name="steelPipeVacuum">
-    <volumeref ref="steelPipeVacuum"/>
-    <position name="steelPipePosition" unit="mm" x="0" y="0" z="copperPipeZInWorld + steelPipeWithRespectToCopperPipeOffset"/>
-</physvol>
-<!-- END STEEL PIPE -->
-...
-```
-
-The different components of the geometry should be clearly labeled with a BEGIN and END comment in `Setup.gdml` and in a single block so that they can be turned on and off easily.
-
-![alt text](/miscellaneous/pictures/reference.JPG "BabyIAXO/reference@688356a3")
-![alt text](/miscellaneous/pictures/steel_pipe.JPG "BabyIAXO/with_steel_pipe@bf2eab49")
