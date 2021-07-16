@@ -2,6 +2,8 @@
 #include <TApplication.h>
 #include <TEveGeoNode.h>
 #include <TEveManager.h>
+#include <TEveViewer.h>
+#include <TGLViewer.h>
 #include <TGeoManager.h>
 
 #include <FTFP_BERT.hh>
@@ -19,6 +21,8 @@
 
 using namespace std;
 
+/*
+ * // May be useful to do simple test in simulation or to use the Geant4 viewer
 class DetectorConstruction : public G4VUserDetectorConstruction {
    public:
     inline DetectorConstruction() : G4VUserDetectorConstruction() {}
@@ -36,6 +40,7 @@ class ActionInitialization : public G4VUserActionInitialization {
     virtual void BuildForMaster() const {}
     virtual void Build() const {}
 };
+*/
 
 int main(int argc, char** argv) {
     BabyIAXOGeometry::Initialize();
@@ -49,7 +54,21 @@ int main(int argc, char** argv) {
 
     auto geoManager = new TGeoManager();
     TGeoManager::Import(filename.c_str());
-    geoManager->CheckOverlaps(0.0001, "d");  // TODO: why not working? (doesn't detect overlaps!)
+    geoManager->CheckOverlaps(0.0001, "d");
+
+    const int transparencyLevel = 35;
+    for (int i = 0; i < gGeoManager->GetListOfVolumes()->GetEntries(); i++) {
+        auto volume = gGeoManager->GetVolume(i);
+        auto material = volume->GetMaterial();
+        if (material->GetDensity() <= 0.01) {
+            volume->SetTransparency(95);
+            if (material->GetDensity() <= 0.01) {
+                volume->SetVisibility(kFALSE);
+            }
+        } else {
+            volume->SetTransparency(transparencyLevel);
+        }
+    }
 
     cout << "Opening TEveManager" << endl;
 
@@ -60,37 +79,15 @@ int main(int argc, char** argv) {
     auto topNode = new TEveGeoTopNode(geoManager, node);
     eveManager->AddGlobalElement(topNode);
 
+    auto glViewer = eveManager->GetDefaultGLViewer();
+    glViewer->UseLightColorSet();
+
+    eveManager->FullRedraw3D(kTRUE);
+
+    glViewer->SavePicture("picture.png");
+
     cout << "Geometry Viewer Loaded!" << endl;
     app.Run();
-
-    return 0;
-
-    G4UIExecutive* ui;
-    ui = new G4UIExecutive(argc, argv);
-
-    auto runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
-
-    auto visManager = new G4VisExecutive();
-    visManager->Initialize();
-
-    runManager->SetUserInitialization(new DetectorConstruction);
-    runManager->SetUserInitialization(new FTFP_BERT);
-    runManager->SetUserInitialization(new ActionInitialization);
-
-    vector<string> commands = {
-        "/run/initialize",            //
-        "/vis/open OGL 600x600-0+0",  //
-        "/vis/drawVolume",            //
-    };
-
-    cout << "RUNNING COMMANDS:" << endl;
-
-    auto UImanager = G4UImanager::GetUIpointer();
-    for (const auto& command : commands) {
-        UImanager->ApplyCommand(command);
-    }
-
-    ui->SessionStart();
 
     return 0;
 }
