@@ -11,8 +11,9 @@ class G4Material;
 class BaseGeometry {
    protected:
     static inline G4VPhysicalVolume* fWorld = nullptr;
-    static std::map<std::string, G4Material*> materials;
-    constexpr static const double expansionFactor = 1.01;  // for subtractions, to improve visibility (should never affect simulation outcome)
+    // static std::map<std::string, G4Material*> materials;
+    constexpr static const double fExpansionFactor = 1.01;  // for subtractions, to improve visibility (should never affect simulation outcome)
+    static inline bool fCheckOverlaps = true;
 
    public:
     inline BaseGeometry() = default;

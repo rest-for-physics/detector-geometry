@@ -48,8 +48,6 @@ double CathodePatternDiskRadius(4.25 * mm), CathodePatternLineWidth(0.3 * mm);
 }  // namespace dimensions::chamber
 
 void BabyIAXOGeometry::Initialize() {
-    G4bool checkOverlaps = true;
-
     double worldSize = 1000 * mm;
 
     auto solidWorld = new G4Box("World", 0.5 * worldSize, 0.5 * worldSize, 0.5 * worldSize);
@@ -63,9 +61,13 @@ void BabyIAXOGeometry::Initialize() {
                                                          nullptr,                // its mother  volume
                                                          false,                  // no boolean operation
                                                          0,                      // copy number
-                                                         checkOverlaps);         // overlaps checking
+                                                         fCheckOverlaps);        // overlaps checking
     fWorld = physicalWorld;
 
+    PlaceChamber();
+}
+
+void BabyIAXOGeometry::PlaceChamber() {
     // // Chamber
     auto rotation45degZ = new G4RotationMatrix(0, 0, M_PI_4);
     auto rotation90degZ = new G4RotationMatrix(0, 0, 2 * M_PI_4);
@@ -74,7 +76,7 @@ void BabyIAXOGeometry::Initialize() {
     auto solidChamberBody = new G4SubtractionSolid(
         "Chamber",  //
         new G4Box("solidChamberBase", dimensions::chamber::SquareSide / 2, dimensions::chamber::SquareSide / 2, dimensions::chamber::Height / 2),
-        new G4Tubs("chamberBodyHole", 0, dimensions::chamber::Diameter / 2, dimensions::chamber::Height / 2 * expansionFactor, 0, 2 * M_PI));
+        new G4Tubs("chamberBodyHole", 0, dimensions::chamber::Diameter / 2, dimensions::chamber::Height / 2 * fExpansionFactor, 0, 2 * M_PI));
     auto logicChamberBody = new G4LogicalVolume(solidChamberBody, materials::Copper, solidChamberBody->GetName());
     // Chamber backplate
     auto solidChamberBackplate = new G4Box("solidChamberBackplate", dimensions::chamber::SquareSide / 2, dimensions::chamber::SquareSide / 2,
@@ -143,24 +145,24 @@ void BabyIAXOGeometry::Initialize() {
                                            G4ThreeVector(0, 0, dimensions::chamber::Height / 2 - dimensions::chamber::CathodeWindowThickness / 2));
     auto logicGas = new G4LogicalVolume(solidGas, materials::Gas, solidGas->GetName());
     // Chamber placement
-    new G4PVPlacement(nullptr, G4ThreeVector(), logicGas->GetName(), logicGas, physicalWorld, false, 0);
-    new G4PVPlacement(nullptr, G4ThreeVector(), logicChamberBody->GetName(), logicChamberBody, physicalWorld, false, 0);
+    new G4PVPlacement(nullptr, G4ThreeVector(), logicGas->GetName(), logicGas, fWorld, false, 0);
+    new G4PVPlacement(nullptr, G4ThreeVector(), logicChamberBody->GetName(), logicChamberBody, fWorld, false, 0);
     new G4PVPlacement(
         nullptr,
         G4ThreeVector(0, 0,
                       -dimensions::chamber::Height / 2 - dimensions::chamber::ReadoutKaptonThickness - dimensions::chamber::BackplateThickness / 2),
-        logicChamberBackplate->GetName(), logicChamberBackplate, physicalWorld, false, 0);
-    new G4PVPlacement(nullptr, G4ThreeVector(), logicChamberTeflonWall->GetName(), logicChamberTeflonWall, physicalWorld, false, 0);
+        logicChamberBackplate->GetName(), logicChamberBackplate, fWorld, false, 0);
+    new G4PVPlacement(nullptr, G4ThreeVector(), logicChamberTeflonWall->GetName(), logicChamberTeflonWall, fWorld, false, 0);
     new G4PVPlacement(nullptr, G4ThreeVector(0, 0, -dimensions::chamber::Height / 2 - dimensions::chamber::ReadoutKaptonThickness / 2),
-                      logicKaptonReadout->GetName(), logicKaptonReadout, physicalWorld, false, 0);
+                      logicKaptonReadout->GetName(), logicKaptonReadout, fWorld, false, 0);
     new G4PVPlacement(rotation45degZ, G4ThreeVector(0, 0, -dimensions::chamber::Height / 2 + dimensions::chamber::ReadoutCopperThickness / 2),
-                      logicCopperReadout->GetName(), logicCopperReadout, physicalWorld, false, 0);
+                      logicCopperReadout->GetName(), logicCopperReadout, fWorld, false, 0);
     new G4PVPlacement(nullptr, G4ThreeVector(0, 0, dimensions::chamber::Height / 2 + dimensions::chamber::CathodeTeflonDiskThickness / 2),
-                      logicCathodeTeflonDisk->GetName(), logicCathodeTeflonDisk, physicalWorld, false, 0);
+                      logicCathodeTeflonDisk->GetName(), logicCathodeTeflonDisk, fWorld, false, 0);
     new G4PVPlacement(nullptr, G4ThreeVector(0, 0, dimensions::chamber::Height / 2 - dimensions::chamber::CathodeWindowThickness / 2),
-                      logicCathodeWindow->GetName(), logicCathodeWindow, physicalWorld, false, 0);
+                      logicCathodeWindow->GetName(), logicCathodeWindow, fWorld, false, 0);
     new G4PVPlacement(nullptr, G4ThreeVector(0, 0, dimensions::chamber::Height / 2 + dimensions::chamber::CathodeCopperSupportThickness / 2),
-                      logicCathodeCopperDiskFinal->GetName(), logicCathodeCopperDiskFinal, physicalWorld, false, 0);
+                      logicCathodeCopperDiskFinal->GetName(), logicCathodeCopperDiskFinal, fWorld, false, 0);
     new G4PVPlacement(nullptr, G4ThreeVector(0, 0, dimensions::chamber::Height / 2 + dimensions::chamber::CathodeTeflonDiskThickness / 2),
-                      logicCathodeFilling->GetName(), logicCathodeFilling, physicalWorld, false, 0);
+                      logicCathodeFilling->GetName(), logicCathodeFilling, fWorld, false, 0);
 }
