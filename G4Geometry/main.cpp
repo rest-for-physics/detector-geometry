@@ -18,7 +18,7 @@
 #include <string>
 #include <vector>
 
-#include "IaxoGeometry.h"
+#include "BabyIaxoGeometry.h"
 
 using namespace std;
 
@@ -27,7 +27,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction {
     inline DetectorConstruction() : G4VUserDetectorConstruction() {}
 
     virtual G4VPhysicalVolume* Construct() {
-        auto world = IaxoGeometry::GetWorld();
+        auto world = BaseGeometry::GetWorld();
         return world;
     }
 };
@@ -41,14 +41,14 @@ class ActionInitialization : public G4VUserActionInitialization {
 };
 
 int main(int argc, char** argv) {
-    IaxoGeometry::Initialize();
-    const bool overlaps = IaxoGeometry::CheckOverlaps();
+    BabyIAXOGeometry::Initialize();
+    const bool overlaps = BabyIAXOGeometry::CheckOverlaps();
     if (overlaps) {
         cout << "OVERLAPS!" << endl;
         return 1;
     }
     const string filename = "geometry.gdml";
-    IaxoGeometry::WriteGDML(filename);
+    BabyIAXOGeometry::WriteGDML(filename);
 
     cout << "Opening TEveManager" << endl;
     TApplication app("Geometry Viewer", &argc, argv);

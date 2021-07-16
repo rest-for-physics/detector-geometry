@@ -1,8 +1,8 @@
 //
-// Created by Luis on 7/16/2021.
+// Created by lobis on 16/07/2021.
 //
 
-#include "IaxoGeometry.h"
+#include "BabyIaxoGeometry.h"
 
 #include <G4Box.hh>
 #include <G4Cons.hh>
@@ -20,19 +20,9 @@
 #include <G4VisAttributes.hh>
 #include <filesystem>
 
-using namespace std;
-
-void IaxoGeometry::WriteGDML(const std::string& filename) {
-    G4GDMLParser parser;
-    if (std::filesystem::is_regular_file(filename)) std::filesystem::remove(filename);
-    parser.Write(filename, fWorld);
-}
-
-const double expansionFactor = 1.01;  // for subtractions, to improve visibility (should never affect simulation outcome)
-
 namespace materials {
-G4Material* copper = G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu");
-}
+auto copper = G4NistManager::Instance() -> FindOrBuildMaterial("G4_Cu");
+};
 
 namespace dimensions::chamber {
 double Height(30.0 * mm), Diameter(102.0 * mm);
@@ -40,7 +30,7 @@ double BackplateThickness(15.0 * mm), SquareSide(134.0 * mm);
 double TeflonWallThickness(1.0 * mm);
 }  // namespace dimensions::chamber
 
-void IaxoGeometry::Initialize() {
+void BabyIAXOGeometry::Initialize() {
     G4NistManager* nist = G4NistManager::Instance();
     G4bool checkOverlaps = true;
 
@@ -92,5 +82,3 @@ void IaxoGeometry::Initialize() {
      */
     // chamber
 }
-
-bool IaxoGeometry::CheckOverlaps() { return fWorld->CheckOverlaps(); }
