@@ -24,7 +24,7 @@ void BaseGeometry::WriteGDML(const std::string& filename) {
 // TODO: make it accessible from derived class
 /*
 map<string, G4Material*> materials = {
-    {"copper", G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu")},
+    {"Copper", G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu")},
 };
 */
 

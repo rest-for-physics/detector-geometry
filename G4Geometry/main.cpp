@@ -50,11 +50,15 @@ int main(int argc, char** argv) {
     const string filename = "geometry.gdml";
     BabyIAXOGeometry::WriteGDML(filename);
 
-    cout << "Opening TEveManager" << endl;
-    TApplication app("Geometry Viewer", &argc, argv);
-    auto eveManager = TEveManager::Create();
     auto geoManager = new TGeoManager();
     TGeoManager::Import(filename.c_str());
+    geoManager->CheckOverlaps(0.0001, "d");  // TODO: why not working? (doesn't detect overlaps!)
+
+    cout << "Opening TEveManager" << endl;
+
+    TApplication app("Geometry Viewer", &argc, argv);
+    auto eveManager = TEveManager::Create();
+
     TGeoNode* node = geoManager->GetTopNode();
     auto topNode = new TEveGeoTopNode(geoManager, node);
     eveManager->AddGlobalElement(topNode);
