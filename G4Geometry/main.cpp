@@ -2,9 +2,16 @@
 // Created by Luis on 7/16/2021.
 //
 
+#include <TApplication.h>
+#include <TEveGeoNode.h>
+#include <TEveManager.h>
+#include <TGeoManager.h>
+
+#include <FTFP_BERT.hh>
 #include <G4RunManagerFactory.hh>
 #include <G4UIExecutive.hh>
 #include <G4UImanager.hh>
+#include <G4VUserActionInitialization.hh>
 #include <G4VUserDetectorConstruction.hh>
 #include <G4VisExecutive.hh>
 #include <globals.hh>
@@ -20,36 +27,69 @@ class DetectorConstruction : public G4VUserDetectorConstruction {
     inline DetectorConstruction() : G4VUserDetectorConstruction() {}
 
     virtual G4VPhysicalVolume* Construct() {
-        IaxoGeometry geometry;
-        auto world = geometry.GetWorld();
+        auto world = IaxoGeometry::GetWorld();
         return world;
     }
 };
 
-int main() {
-    IaxoGeometry geometry;
-    auto world = geometry.GetWorld();
+class ActionInitialization : public G4VUserActionInitialization {
+   public:
+    ActionInitialization() = default;
 
-    auto runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
-    auto visManager = new G4VisExecutive();
-    visManager->Initialize();
-    auto UImanager = G4UImanager::GetUIpointer();
+    virtual void BuildForMaster() const {}
+    virtual void Build() const {}
+};
 
-    // runManager->SetUserInitialization(new DetectorConstruction());
+int main(int argc, char** argv) {
+    IaxoGeometry::Initialize();
+    const bool overlaps = IaxoGeometry::CheckOverlaps();
+    if (overlaps) {
+        cout << "OVERLAPS!" << endl;
+        return 1;
+    }
+    const string filename = "geometry.gdml";
+    IaxoGeometry::WriteGDML(filename);
+
+    cout << "Opening TEveManager" << endl;
+    TApplication app("Geometry Viewer", &argc, argv);
+    auto eveManager = TEveManager::Create();
+    auto geoManager = new TGeoManager();
+    TGeoManager::Import(filename.c_str());
+    TGeoNode* node = geoManager->GetTopNode();
+    auto topNode = new TEveGeoTopNode(geoManager, node);
+    eveManager->AddGlobalElement(topNode);
+
+    cout << "Geometry Viewer Loaded!" << endl;
+    app.Run();
 
     return 0;
+
+    G4UIExecutive* ui;
+    ui = new G4UIExecutive(argc, argv);
+
+    auto runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::Default);
+
+    auto visManager = new G4VisExecutive();
+    visManager->Initialize();
+
+    runManager->SetUserInitialization(new DetectorConstruction);
+    runManager->SetUserInitialization(new FTFP_BERT);
+    runManager->SetUserInitialization(new ActionInitialization);
+
     vector<string> commands = {
-        "/run/initialize",           //
-        "/vis/open OGLSX",           //
-        "/vis/scene/create",         //
-        "/vis/scene/add/volume",     //
-        "/vis/sceneHandler/attach",  //
-        "/vis/viewer/flush",         //
+        "/run/initialize",            //
+        "/vis/open OGL 600x600-0+0",  //
+        "/vis/drawVolume",            //
     };
 
+    cout << "RUNNING COMMANDS:" << endl;
+
+    auto UImanager = G4UImanager::GetUIpointer();
     for (const auto& command : commands) {
         UImanager->ApplyCommand(command);
     }
+
+    ui->SessionStart();
 
     return 0;
 }

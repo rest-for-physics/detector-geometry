@@ -7,7 +7,7 @@ message("===============  ${PROJECT_NAME}  ==============")
 SET(CMAKE_CXX_STANDARD 17)
 
 # Find ROOT
-find_package(ROOT REQUIRED COMPONENTS RIO Geom)
+find_package(ROOT REQUIRED COMPONENTS RIO Geom Eve)
 execute_process(COMMAND root-config --cflags OUTPUT_VARIABLE ROOT_CFLAGS)
 string(STRIP ${ROOT_CFLAGS} ROOT_CFLAGS)
 message("-- Found ROOT version: ${ROOT_VERSION} with compilation flags: ${ROOT_CFLAGS} and libraries: ${ROOT_LIBRARIES}")
@@ -25,7 +25,7 @@ add_executable(${PROJECT_NAME} main.cpp ${sources} ${headers})
 
 target_link_libraries(
         ${PROJECT_NAME}
-        ${ROOT_LIBRARIES} ROOT::Geom ROOT::RIO
+        ${ROOT_LIBRARIES} ROOT::Geom ROOT::RIO ROOT::Eve
         ${Geant4_LIBRARIES}
         ${REST_LIBRARIES}
 )

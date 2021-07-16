@@ -5,16 +5,22 @@
 #ifndef IAXO_DETECTOR_GEOMETRY_IAXOGEOMETRY_H
 #define IAXO_DETECTOR_GEOMETRY_IAXOGEOMETRY_H
 
+#include <string>
+
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 
 class IaxoGeometry {
    private:
-    G4VPhysicalVolume* fWorld;
+    static inline G4VPhysicalVolume* fWorld = nullptr;
 
    public:
-    IaxoGeometry();
-    inline G4VPhysicalVolume* GetWorld() const { return fWorld; }
+    inline IaxoGeometry() = default;
+    static void Initialize();
+    static G4VPhysicalVolume* GetWorld() { return fWorld; }
+
+    static void WriteGDML(const std::string&);
+    static bool CheckOverlaps();
 };
 
 #endif  // IAXO_DETECTOR_GEOMETRY_IAXOGEOMETRY_H
