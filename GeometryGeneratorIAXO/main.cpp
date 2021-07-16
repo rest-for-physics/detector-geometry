@@ -1,6 +1,3 @@
-//
-// Created by Luis on 7/16/2021.
-//
 
 #include <TApplication.h>
 #include <TEveGeoNode.h>

@@ -1,9 +1,5 @@
-//
-// Created by Luis on 7/16/2021.
-//
-
-#ifndef IAXO_DETECTOR_GEOMETRY_BASEGEOMETRY_H
-#define IAXO_DETECTOR_GEOMETRY_BASEGEOMETRY_H
+#ifndef GEOMETRY_GENERATOR_IAXO_BASEGEOMETRY_H
+#define GEOMETRY_GENERATOR_IAXO_BASEGEOMETRY_H
 
 #include <map>
 #include <string>
@@ -27,4 +23,4 @@ class BaseGeometry {
     static bool CheckOverlaps();
 };
 
-#endif  // IAXO_DETECTOR_GEOMETRY_BASEGEOMETRY_H
+#endif  // GEOMETRY_GENERATOR_IAXO_BASEGEOMETRY_H

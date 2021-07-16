@@ -1,6 +1,3 @@
-//
-// Created by lobis on 16/07/2021.
-//
 
 #include "BabyIaxoGeometry.h"
 
@@ -32,7 +29,6 @@ auto LightGuide = G4NistManager::Instance() -> FindOrBuildMaterial("G4_LUCITE");
 auto Cadmium = G4NistManager::Instance() -> FindOrBuildMaterial("G4_Cd");
 auto Neoprene = G4NistManager::Instance() -> FindOrBuildMaterial("G4_NEOPRENE");
 auto Steel = G4NistManager::Instance() -> FindOrBuildMaterial("G4_STAINLESS_STEEL");
-
 }  // namespace materials
 
 namespace dimensions::chamber {

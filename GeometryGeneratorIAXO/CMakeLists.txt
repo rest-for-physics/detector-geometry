@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
 
-project(IAXO-DETECTOR-GEOMETRY LANGUAGES CXX HOMEPAGE_URL https://github.com/iaxo/detector-geometry)
+project(GeometryGeneratorIAXO LANGUAGES CXX HOMEPAGE_URL https://github.com/iaxo/detector-geometry)
 
 message("===============  ${PROJECT_NAME}  ==============")
 
