@@ -62,7 +62,8 @@ int main(int argc, char** argv) {
         auto material = volume->GetMaterial();
         if (material->GetDensity() <= 0.01) {
             volume->SetTransparency(95);
-            if (material->GetDensity() <= 0.01) {
+            if (material->GetDensity() <= 0.001) {
+                // We consider this vacuum for display purposes
                 volume->SetVisibility(kFALSE);
             }
         } else {
