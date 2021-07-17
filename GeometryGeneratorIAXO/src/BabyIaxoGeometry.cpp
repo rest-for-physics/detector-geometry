@@ -80,67 +80,65 @@ void BabyIAXOGeometry::PlaceChamber() {
     auto rotation90degZ = new G4RotationMatrix(0, 0, 2 * M_PI_4);
     auto rotation135degZ = new G4RotationMatrix(0, 0, 3 * M_PI_4);
     // Chamber body
-    auto solidChamberBody = new G4SubtractionSolid(
-        "solidChamberBody", new G4Box("solidChamberBodyBase", chamber::SquareSide / 2, chamber::SquareSide / 2, chamber::Height / 2),
-        new G4Tubs("solidChamberBodyHole", 0, chamber::Diameter / 2, chamber::Height / 2 * fExpansionFactor, 0, 2 * M_PI));
+    auto solidChamberBody =
+        new G4SubtractionSolid("ChamberBody", new G4Box("ChamberBodyBase", chamber::SquareSide / 2, chamber::SquareSide / 2, chamber::Height / 2),
+                               new G4Tubs("ChamberBodyHole", 0, chamber::Diameter / 2, chamber::Height / 2 * fExpansionFactor, 0, 2 * M_PI));
     auto logicChamberBody = new G4LogicalVolume(solidChamberBody, materials::Copper, solidChamberBody->GetName());
     // Chamber backplate
-    auto solidChamberBackplate =
-        new G4Box("solidChamberBackplate", chamber::SquareSide / 2, chamber::SquareSide / 2, chamber::BackplateThickness / 2);
+    auto solidChamberBackplate = new G4Box("ChamberBackplate", chamber::SquareSide / 2, chamber::SquareSide / 2, chamber::BackplateThickness / 2);
     auto logicChamberBackplate = new G4LogicalVolume(solidChamberBackplate, materials::Copper, solidChamberBackplate->GetName());
     // Chamber teflon inner wall
-    auto solidChamberTeflonWall = new G4Tubs("solidChamberTeflonWall", chamber::Diameter / 2 - chamber::TeflonWallThickness, chamber::Diameter / 2,
+    auto solidChamberTeflonWall = new G4Tubs("ChamberTeflonWall", chamber::Diameter / 2 - chamber::TeflonWallThickness, chamber::Diameter / 2,
                                              chamber::Height / 2, 0, 2 * M_PI);
     auto logicChamberTeflonWall = new G4LogicalVolume(solidChamberTeflonWall, materials::PTFE, solidChamberTeflonWall->GetName());
     // Chamber kapton readout
-    auto solidKaptonReadout = new G4Box("solidKaptonReadout", chamber::SquareSide / 2, chamber::SquareSide / 2, chamber::ReadoutKaptonThickness / 2);
+    auto solidKaptonReadout = new G4Box("KaptonReadout", chamber::SquareSide / 2, chamber::SquareSide / 2, chamber::ReadoutKaptonThickness / 2);
     auto logicKaptonReadout = new G4LogicalVolume(solidKaptonReadout, materials::Kapton, solidKaptonReadout->GetName());
     // Chamber copper readout
     auto solidCopperReadout =
-        new G4Box("solidCopperReadout", chamber::ReadoutPlaneSide / 2, chamber::ReadoutPlaneSide / 2, chamber::ReadoutCopperThickness / 2);
+        new G4Box("CopperReadout", chamber::ReadoutPlaneSide / 2, chamber::ReadoutPlaneSide / 2, chamber::ReadoutCopperThickness / 2);
     auto logicCopperReadout = new G4LogicalVolume(solidCopperReadout, materials::Copper, solidCopperReadout->GetName());
     // Chamber cathode support
-    auto solidCathodeTeflonDiskBase = new G4Tubs("solidCathodeTeflonDiskBase", chamber::CathodeTeflonDiskHoleRadius, chamber::SquareSide / 2,
+    auto solidCathodeTeflonDiskBase = new G4Tubs("CathodeTeflonDiskBase", chamber::CathodeTeflonDiskHoleRadius, chamber::SquareSide / 2,
                                                  chamber::CathodeTeflonDiskThickness / 2, 0, 2 * M_PI);
-    auto solidCathodeCopperDisk = new G4Tubs("solidCathodeCopperDisk", chamber::CathodeCopperSupportInnerRadius,
-                                             chamber::CathodeCopperSupportOuterRadius, chamber::CathodeCopperSupportThickness / 2, 0, 2 * M_PI);
+    auto solidCathodeCopperDisk = new G4Tubs("CathodeCopperDisk", chamber::CathodeCopperSupportInnerRadius, chamber::CathodeCopperSupportOuterRadius,
+                                             chamber::CathodeCopperSupportThickness / 2, 0, 2 * M_PI);
     auto solidCathodeTeflonDisk =
-        new G4SubtractionSolid("solidCathodeTeflonDisk", solidCathodeTeflonDiskBase, solidCathodeCopperDisk, nullptr,
+        new G4SubtractionSolid("CathodeTeflonDisk", solidCathodeTeflonDiskBase, solidCathodeCopperDisk, nullptr,
                                G4ThreeVector(0, 0, -chamber::CathodeTeflonDiskThickness / 2 + chamber::CathodeCopperSupportThickness / 2));
     auto logicCathodeTeflonDisk = new G4LogicalVolume(solidCathodeTeflonDisk, materials::PTFE, solidCathodeTeflonDisk->GetName());
     // cathode pattern
-    auto solidCathodeWindow =
-        new G4Tubs("solidCathodeWindow", 0, chamber::CathodeTeflonDiskHoleRadius, chamber::CathodeWindowThickness / 2, 0, 2 * M_PI);
+    auto solidCathodeWindow = new G4Tubs("CathodeWindow", 0, chamber::CathodeTeflonDiskHoleRadius, chamber::CathodeWindowThickness / 2, 0, 2 * M_PI);
     auto logicCathodeWindow = new G4LogicalVolume(solidCathodeWindow, materials::Mylar, solidCathodeWindow->GetName());
-    auto solidCathodePatternLineAux = new G4Box("solidCathodePatternLineAux", chamber::CathodePatternLineWidth / 2,
+    auto solidCathodePatternLineAux = new G4Box("CathodePatternLineAux", chamber::CathodePatternLineWidth / 2,
                                                 chamber::CathodeCopperSupportInnerRadius, chamber::CathodeCopperSupportThickness / 2);
-    auto solidCathodePatternCentralHole = new G4Tubs("solidCathodePatternCentralHole", 0, chamber::CathodePatternDiskRadius,
-                                                     chamber::CathodeCopperSupportThickness * 1.10 / 2, 0, 2 * M_PI);
-    auto solidCathodePatternLine = new G4SubtractionSolid("solidCathodePatternLine", solidCathodePatternLineAux, solidCathodePatternCentralHole);
-    auto solidCathodePatternDisk = new G4Tubs("solidCathodeCopperDiskAux", chamber::CathodePatternDiskRadius - chamber::CathodePatternLineWidth,
+    auto solidCathodePatternCentralHole =
+        new G4Tubs("CathodePatternCentralHole", 0, chamber::CathodePatternDiskRadius, chamber::CathodeCopperSupportThickness * 1.10 / 2, 0, 2 * M_PI);
+    auto solidCathodePatternLine = new G4SubtractionSolid("CathodePatternLine", solidCathodePatternLineAux, solidCathodePatternCentralHole);
+    auto solidCathodePatternDisk = new G4Tubs("CathodeCopperDiskAux", chamber::CathodePatternDiskRadius - chamber::CathodePatternLineWidth,
                                               chamber::CathodePatternDiskRadius, chamber::CathodeCopperSupportThickness / 2, 0, 2 * M_PI);
 
-    auto cathodeCopperDiskSolidAux0 = new G4UnionSolid("", solidCathodeCopperDisk, solidCathodePatternLine);
-    auto cathodeCopperDiskSolidAux1 = new G4UnionSolid("", cathodeCopperDiskSolidAux0, solidCathodePatternLine, rotation45degZ, G4ThreeVector());
-    auto cathodeCopperDiskSolidAux2 = new G4UnionSolid("", cathodeCopperDiskSolidAux1, solidCathodePatternLine, rotation90degZ, G4ThreeVector());
-    auto cathodeCopperDiskSolid = new G4UnionSolid("", cathodeCopperDiskSolidAux2, solidCathodePatternLine, rotation135degZ, G4ThreeVector());
+    auto solidCathodeCopperDiskAux0 = new G4UnionSolid("aux", solidCathodeCopperDisk, solidCathodePatternLine);
+    auto solidCathodeCopperDiskAux1 = new G4UnionSolid("aux", solidCathodeCopperDiskAux0, solidCathodePatternLine, rotation45degZ, G4ThreeVector());
+    auto solidCathodeCopperDiskAux2 = new G4UnionSolid("aux", solidCathodeCopperDiskAux1, solidCathodePatternLine, rotation90degZ, G4ThreeVector());
+    auto solidCathodeCopperDiskAux = new G4UnionSolid("aux", solidCathodeCopperDiskAux2, solidCathodePatternLine, rotation135degZ, G4ThreeVector());
 
-    auto solidCathodeCopperDiskFinal = new G4UnionSolid("solidCathodeCopperDiskFinal", cathodeCopperDiskSolid, solidCathodePatternDisk);
+    auto solidCathodeCopperDiskFinal = new G4UnionSolid("CathodeCopperDiskFinal", solidCathodeCopperDiskAux, solidCathodePatternDisk);
     auto logicCathodeCopperDiskFinal = new G4LogicalVolume(solidCathodeCopperDiskFinal, materials::Copper, solidCathodeCopperDiskFinal->GetName());
 
     auto solidCathodeFillingBase =
-        new G4Tubs("solidCathodeFillingBase", 0, chamber::CathodeTeflonDiskHoleRadius, chamber::CathodeTeflonDiskThickness / 2, 0, 2 * M_PI);
+        new G4Tubs("CathodeFillingBase", 0, chamber::CathodeTeflonDiskHoleRadius, chamber::CathodeTeflonDiskThickness / 2, 0, 2 * M_PI);
     auto solidCathodeFilling =
-        new G4SubtractionSolid("solidCathodeFillingSolid", solidCathodeFillingBase, solidCathodeCopperDiskFinal, nullptr,
+        new G4SubtractionSolid("CathodeFilling", solidCathodeFillingBase, solidCathodeCopperDiskFinal, nullptr,
                                G4ThreeVector(0, 0, -chamber::CathodeTeflonDiskThickness / 2 + chamber::CathodeCopperSupportThickness / 2));
     auto logicCathodeFilling = new G4LogicalVolume(solidCathodeFilling, materials::Vacuum, solidCathodeFilling->GetName());
 
     // Chamber gas
-    auto solidGasBase = new G4Tubs("solidGasBase", 0, chamber::Diameter / 2 - chamber::TeflonWallThickness, chamber::Height / 2, 0, 2 * M_PI);
+    auto solidGasBase = new G4Tubs("GasBase", 0, chamber::Diameter / 2 - chamber::TeflonWallThickness, chamber::Height / 2, 0, 2 * M_PI);
 
-    auto solidGasSubtraction = new G4SubtractionSolid("solidGasSubtraction", solidGasBase, solidCopperReadout, rotation45degZ,
+    auto solidGasSubtraction = new G4SubtractionSolid("GasSubtraction", solidGasBase, solidCopperReadout, rotation45degZ,
                                                       G4ThreeVector(0, 0, -chamber::Height / 2 + chamber::ReadoutCopperThickness / 2));
-    auto solidGas = new G4SubtractionSolid("solidGas", solidGasSubtraction, solidCathodeWindow, nullptr,
+    auto solidGas = new G4SubtractionSolid("Gas", solidGasSubtraction, solidCathodeWindow, nullptr,
                                            G4ThreeVector(0, 0, chamber::Height / 2 - chamber::CathodeWindowThickness / 2));
     auto logicGas = new G4LogicalVolume(solidGas, materials::Gas, solidGas->GetName());
     // Chamber placement
@@ -165,69 +163,12 @@ void BabyIAXOGeometry::PlaceChamber() {
 
 void BabyIAXOGeometry::PlaceShielding() {
     auto solidShielding = new G4SubtractionSolid(
-        "solidShielding",  //
-        new G4Box("solidShieldingBlock", shielding::SizeXY / 2, shielding::SizeXY / 2, shielding::SizeZ / 2),
-        new G4Box("solidShieldingShaft", shielding::ShaftShortSideX / 2, shielding::ShaftShortSideY / 2,
-                  shielding::ShaftLongSide / 2 * fExpansionFactor),
+        "Shielding",  //
+        new G4Box("ShieldingBlock", shielding::SizeXY / 2, shielding::SizeXY / 2, shielding::SizeZ / 2),
+        new G4Box("ShieldingShaft", shielding::ShaftShortSideX / 2, shielding::ShaftShortSideY / 2, shielding::ShaftLongSide / 2 * fExpansionFactor),
         nullptr, G4ThreeVector(0, 0, shielding::SizeZ / 2 - shielding::ShaftLongSide / 2 - (1 - fExpansionFactor) * shielding::ShaftLongSide / 2));
     auto logicShielding = new G4LogicalVolume(solidShielding, materials::Lead, solidShielding->GetName());
 
     // Placement
     new G4PVPlacement(nullptr, G4ThreeVector(0, 0, -shielding::OffsetZ), logicShielding->GetName(), logicShielding, fWorld, false, 0);
-    /*
-
-
-        val shieldingVolume: GdmlRef<GdmlAssembly> by lazy {
-            val leadBoxSolid =
-                solids.box(Shielding.SizeXY.mm, Shielding.SizeXY.mm, Shielding.SizeZ.mm, "leadBoxSolid")
-            val leadBoxShaftSolid =
-                solids.box(
-                    Shielding.ShaftShortSideX.mm,
-                    Shielding.ShaftShortSideY.mm,
-                    Shielding.ShaftLongSide.mm,
-                    "leadBoxShaftSolid"
-                )
-            val leadBoxWithShaftSolid =
-                solids.subtraction(leadBoxSolid, leadBoxShaftSolid, "leadBoxWithShaftSolid") {
-                    position(z = Shielding.SizeZ.mm / 2 - Shielding.ShaftLongSide.mm / 2)
-                }
-            val leadShieldingVolume = volume(iaxoMaterials.lead, leadBoxWithShaftSolid, "ShieldingVolume")
-            // lead shielding envelope
-            val leadBoxEnvelopeSolid = solids.subtraction(
-                solids.subtraction(
-                    solids.box(
-                        Shielding.SizeXY.mm + 2 * Shielding.EnvelopeThickness.mm,
-                        Shielding.SizeXY.mm + 2 * Shielding.EnvelopeThickness.mm,
-                        Shielding.SizeZ.mm + 2 * Shielding.EnvelopeThickness.mm,
-                        "leadBoxEnvelopeBase"
-                    ), leadBoxSolid,
-                    "leadBoxEnvelopeWithoutHole"
-                ), solids.box(
-                    Shielding.ShaftShortSideX.mm,
-                    Shielding.ShaftShortSideY.mm,
-                    Shielding.EnvelopeThickness.mm,
-                    "leadBoxEnvelopeHole"
-                ), "leadBoxEnvelope"
-            ) {
-                position(z = Shielding.SizeZ.mm / 2 + Shielding.EnvelopeThickness.mm / 2)
-            }
-
-            val leadBoxEnvelopeVolume = volume(
-                iaxoMaterials.world,
-                leadBoxEnvelopeSolid,
-                "leadBoxEnvelopeVolume"
-            )
-
-            return@lazy assembly {
-                name = "Shielding"
-                physVolume(leadShieldingVolume, name = "shielding20cm") {
-                    position(z = -Shielding.OffsetZ.mm)
-                }
-                physVolume(leadBoxEnvelopeVolume, name = "shieldingEnvelope") {
-                    position(z = -Shielding.OffsetZ.mm)
-                }
-            }
-        }
-
-     */
 }

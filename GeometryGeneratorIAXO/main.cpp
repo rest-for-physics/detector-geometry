@@ -83,9 +83,11 @@ int main(int argc, char** argv) {
     auto glViewer = eveManager->GetDefaultGLViewer();
     glViewer->UseLightColorSet();
 
+    glViewer->SetCurrentCamera(TGLViewer::kCameraOrthoZOY);
+
     eveManager->FullRedraw3D(kTRUE);
 
-    glViewer->SavePicture("picture.png");
+    // glViewer->SavePicture("picture.png");
 
     cout << "Geometry Viewer Loaded!" << endl;
     app.Run();
