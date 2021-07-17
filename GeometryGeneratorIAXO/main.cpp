@@ -83,7 +83,7 @@ int main(int argc, char** argv) {
     auto glViewer = eveManager->GetDefaultGLViewer();
     glViewer->UseLightColorSet();
 
-    glViewer->SetCurrentCamera(TGLViewer::kCameraOrthoZOY);
+    // glViewer->SetCurrentCamera(TGLViewer::kCameraOrthoZOY);
 
     eveManager->FullRedraw3D(kTRUE);
 

@@ -36,25 +36,48 @@ auto Steel = G4NistManager::Instance() -> FindOrBuildMaterial("G4_STAINLESS_STEE
 
 namespace chamber {
 // Body
-double Height(30.0 * mm), Diameter(102.0 * mm);
-double BackplateThickness(15.0 * mm), SquareSide(134.0 * mm);
-double TeflonWallThickness(1.0 * mm);
+double Height(30.0 * mm), Diameter(102.0 * mm), BackplateThickness(15.0 * mm), SquareSide(134.0 * mm), TeflonWallThickness(1.0 * mm);
 // Readout
 double ReadoutKaptonThickness(0.5 * mm), ReadoutCopperThickness(0.2 * mm), ReadoutPlaneSide(60.0 * mm);
 // Cathode
-double CathodeTeflonDiskHoleRadius(15.0 * mm), CathodeTeflonDiskThickness(5.0 * mm), CathodeCopperSupportOuterRadius(45.0 * mm);
-double CathodeCopperSupportInnerRadius(8.5 * mm), CathodeCopperSupportThickness(1.0 * mm), CathodeWindowThickness(0.004 * mm);
-double CathodePatternDiskRadius(4.25 * mm), CathodePatternLineWidth(0.3 * mm);
+double CathodeTeflonDiskHoleRadius(15.0 * mm), CathodeTeflonDiskThickness(5.0 * mm), CathodeCopperSupportOuterRadius(45.0 * mm),
+    CathodeCopperSupportInnerRadius(8.5 * mm), CathodeCopperSupportThickness(1.0 * mm), CathodeWindowThickness(0.004 * mm),
+    CathodePatternDiskRadius(4.25 * mm), CathodePatternLineWidth(0.3 * mm);
 }  // namespace chamber
 
 namespace shielding {
-double SizeXY(590.0 * mm), SizeZ(540.0 * mm), ShaftShortSideX(194.0 * mm), ShaftShortSideY(170.0 * mm), ShaftLongSide(340.0 * mm);
-double DetectorToShieldingSeparation(-60.0 * mm), EnvelopeThickness(10.0 * mm);
-double OffsetZ(DetectorToShieldingSeparation + chamber::Height / 2 + chamber::ReadoutKaptonThickness + chamber::BackplateThickness);
+double SizeXY(590.0 * mm), SizeZ(540.0 * mm), ShaftShortSideX(194.0 * mm), ShaftShortSideY(170.0 * mm), ShaftLongSide(340.0 * mm),
+    DetectorToShieldingSeparation(-60.0 * mm), EnvelopeThickness(10.0 * mm),
+    OffsetZ(DetectorToShieldingSeparation + chamber::Height / 2 + chamber::ReadoutKaptonThickness + chamber::BackplateThickness);
 }  // namespace shielding
 
+namespace pipe {
+double TotalLength(491.0 * mm);
+// Outside
+double ChamberFlangeThickness(14.0 * mm), ChamberFlangeRadius(chamber::SquareSide / 2), TelescopeFlangeThickness(18.0 * mm),
+    TelescopeFlangeRadius(150.0 / 2 * mm);
+double Section2of2Length(150.0 * mm - TelescopeFlangeThickness),
+    Section1of2Length(TotalLength - TelescopeFlangeThickness - ChamberFlangeThickness - Section2of2Length), OuterRadius1(92.0 / 2 * mm),
+    OuterRadius2(108.0 / 2 * mm), Union1Z(ChamberFlangeThickness / 2 + Section1of2Length / 2),
+    Union2Z(Union1Z + Section1of2Length / 2 + Section2of2Length / 2), Union3Z(Union2Z + Section2of2Length / 2 + TelescopeFlangeThickness / 2);
+
+// Inside
+double InsideSection1of3Radius(43.0 / 2 * mm), InsideSection2of3Radius(68.0 / 2 * mm), InsideSection3of3Radius(85.0 / 2 * mm),
+    InsideSectionTelescopeRadius(108.0 / 2 * mm), InsideCone1of3Length(21.65 * mm), InsideCone2of3Length(14.72 * mm), InsideCone3of3Length(9.0 * mm),
+    InsideSection3of3Length(115.0 * mm - InsideCone3of3Length),
+    InsideSection2of3Length(290.0 * mm - InsideSection3of3Length - InsideCone3of3Length - InsideCone2of3Length),
+    InsideSection1of3Length(201.0 * mm - InsideCone1of3Length), InsideUnion1Z(InsideSection1of3Length / 2 + InsideCone1of3Length / 2),
+    InsideUnion2Z(InsideUnion1Z + InsideCone1of3Length / 2 + InsideSection2of3Length / 2),
+    InsideUnion3Z(InsideUnion2Z + InsideSection2of3Length / 2 + InsideCone2of3Length / 2),
+    InsideUnion4Z(InsideUnion3Z + InsideCone2of3Length / 2 + InsideSection3of3Length / 2),
+    InsideUnion5Z(InsideUnion4Z + InsideSection3of3Length / 2 + InsideCone3of3Length / 2),
+    FillingOffsetWithPipe(InsideSection1of3Length / 2 - ChamberFlangeThickness / 2);
+// World
+double ZinWorld(ChamberFlangeThickness / 2 + chamber::Height / 2 + chamber::CathodeTeflonDiskThickness);
+}  // namespace pipe
+
 void BabyIAXOGeometry::Initialize() {
-    double worldSize = 1000 * mm;
+    double worldSize = 1500 * mm;
 
     auto solidWorld = new G4Box("World", 0.5 * worldSize, 0.5 * worldSize, 0.5 * worldSize);
     auto logicWorld = new G4LogicalVolume(solidWorld, materials::Vacuum, solidWorld->GetName());
@@ -72,6 +95,7 @@ void BabyIAXOGeometry::Initialize() {
 
     PlaceChamber();
     PlaceShielding();
+    PlacePipe();
 }
 
 void BabyIAXOGeometry::PlaceChamber() {
@@ -171,4 +195,53 @@ void BabyIAXOGeometry::PlaceShielding() {
 
     // Placement
     new G4PVPlacement(nullptr, G4ThreeVector(0, 0, -shielding::OffsetZ), logicShielding->GetName(), logicShielding, fWorld, false, 0);
+}
+
+void BabyIAXOGeometry::PlacePipe() {
+    // Body
+    auto solidDetectorPipeChamberFlange =
+        new G4Tubs("solidDetectorPipeChamberFlange", 0, pipe::ChamberFlangeRadius, pipe::ChamberFlangeThickness / 2, 0, 2 * M_PI);
+    auto solidDetectorPipeTelescopeFlange =
+        new G4Tubs("solidDetectorPipeTelescopeFlange", 0, pipe::TelescopeFlangeRadius, pipe::TelescopeFlangeThickness / 2, 0, 2 * M_PI);
+    auto solidDetectorPipeSection1of2 = new G4Tubs("solidDetectorPipeSection1of2", 0, pipe::OuterRadius1, pipe::Section1of2Length / 2, 0, 2 * M_PI);
+    auto solidDetectorPipeSection2of2 = new G4Tubs("solidDetectorPipeSection2of2", 0, pipe::OuterRadius2, pipe::Section2of2Length / 2, 0, 2 * M_PI);
+    auto solidDetectorPipeAux1 = new G4UnionSolid("solidDetectorPipeAux1", solidDetectorPipeChamberFlange, solidDetectorPipeSection1of2, nullptr,
+                                                  G4ThreeVector(0, 0, pipe::Union1Z));
+    auto solidDetectorPipeAux2 =
+        new G4UnionSolid("solidDetectorPipeAux2", solidDetectorPipeAux1, solidDetectorPipeSection2of2, nullptr, G4ThreeVector(0, 0, pipe::Union2Z));
+    auto solidDetectorPipeNotEmpty = new G4UnionSolid("solidDetectorPipeNotEmpty", solidDetectorPipeAux2, solidDetectorPipeTelescopeFlange, nullptr,
+                                                      G4ThreeVector(0, 0, pipe::Union3Z));
+    // Inside
+    auto solidDetectorPipeInside1of3 =
+        new G4Tubs("solidDetectorPipeInside1of3", 0, pipe::InsideSection1of3Radius, pipe::InsideSection1of3Length / 2, 0, 2 * M_PI);
+    auto solidDetectorPipeInside2of3 =
+        new G4Tubs("solidDetectorPipeInside2of3", 0, pipe::InsideSection2of3Radius, pipe::InsideSection2of3Length / 2, 0, 2 * M_PI);
+    auto solidDetectorPipeInside3of3 =
+        new G4Tubs("solidDetectorPipeInside3of3", 0, pipe::InsideSection3of3Radius, pipe::InsideSection3of3Length / 2, 0, 2 * M_PI);
+    auto solidDetectorPipeInsideCone1of3 = new G4Cons("solidDetectorPipeInsideCone1of3", 0, pipe::InsideSection1of3Radius, 0,
+                                                      pipe::InsideSection2of3Radius, pipe::InsideCone1of3Length / 2, 0, 2 * M_PI);
+    auto solidDetectorPipeInsideCone2of3 = new G4Cons("solidDetectorPipeInsideCone2of3", 0, pipe::InsideSection2of3Radius, 0,
+                                                      pipe::InsideSection3of3Radius, pipe::InsideCone2of3Length / 2, 0, 2 * M_PI);
+    auto solidDetectorPipeInsideCone3of3 = new G4Cons("solidDetectorPipeInsideCone3of3", 0, pipe::InsideSection3of3Radius, 0,
+                                                      pipe::InsideSectionTelescopeRadius, pipe::InsideCone3of3Length / 2, 0, 2 * M_PI);
+    auto solidDetectorPipeInsideAux1 = new G4UnionSolid("solidDetectorPipeInsideAux1", solidDetectorPipeInside1of3, solidDetectorPipeInsideCone1of3,
+                                                        nullptr, G4ThreeVector(0, 0, pipe::InsideUnion1Z));
+    auto solidDetectorPipeInsideAux2 = new G4UnionSolid("solidDetectorPipeInsideAux2", solidDetectorPipeInsideAux1, solidDetectorPipeInside2of3,
+                                                        nullptr, G4ThreeVector(0, 0, pipe::InsideUnion2Z));
+    auto solidDetectorPipeInsideAux3 = new G4UnionSolid("solidDetectorPipeInsideAux3", solidDetectorPipeInsideAux2, solidDetectorPipeInsideCone2of3,
+                                                        nullptr, G4ThreeVector(0, 0, pipe::InsideUnion3Z));
+    auto solidDetectorPipeInsideAux4 = new G4UnionSolid("solidDetectorPipeInsideAux4", solidDetectorPipeInsideAux3, solidDetectorPipeInside3of3,
+                                                        nullptr, G4ThreeVector(0, 0, pipe::InsideUnion4Z));
+    auto solidDetectorPipeFilling = new G4UnionSolid("DetectorPipeFilling", solidDetectorPipeInsideAux4, solidDetectorPipeInsideCone3of3, nullptr,
+                                                     G4ThreeVector(0, 0, pipe::InsideUnion5Z));
+    auto solidDetectorPipe = new G4SubtractionSolid("DetectorPipe", solidDetectorPipeNotEmpty, solidDetectorPipeFilling, nullptr,
+                                                    G4ThreeVector(0, 0, pipe::InsideSection1of3Length / 2 - pipe::ChamberFlangeThickness / 2));
+
+    // Placements
+    auto logicDetectorPipe = new G4LogicalVolume(solidDetectorPipe, materials::Copper, solidDetectorPipe->GetName());
+    auto logicDetectorPipeFilling = new G4LogicalVolume(solidDetectorPipeFilling, materials::Vacuum, solidDetectorPipeFilling->GetName());
+
+    new G4PVPlacement(nullptr, G4ThreeVector(0, 0, pipe::ZinWorld), logicDetectorPipe->GetName(), logicDetectorPipe, fWorld, false, 0);
+    new G4PVPlacement(nullptr, G4ThreeVector(0, 0, pipe::ZinWorld + pipe::FillingOffsetWithPipe), logicDetectorPipeFilling->GetName(),
+                      logicDetectorPipeFilling, fWorld, false, 0);
 }
