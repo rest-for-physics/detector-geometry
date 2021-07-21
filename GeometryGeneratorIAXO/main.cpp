@@ -34,7 +34,8 @@ int main(int argc, char** argv) {
     const string filename = "geometry.gdml";
     Geometry::WriteGDML(filename);
 
-    // return;
+    // return 0;
+
     auto geoManager = new TGeoManager();
     TGeoManager::Import(filename.c_str());
     geoManager->CheckOverlaps(0.0001, "d");

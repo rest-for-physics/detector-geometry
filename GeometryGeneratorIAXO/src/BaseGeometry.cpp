@@ -10,6 +10,7 @@
 #include <G4NistManager.hh>
 #include <G4RunManager.hh>
 #include <G4SubtractionSolid.hh>
+#include <G4VPhysicalVolume.hh>
 #include <G4VisAttributes.hh>
 #include <filesystem>
 
