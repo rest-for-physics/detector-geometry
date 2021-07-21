@@ -20,6 +20,7 @@
 
 // TODO: place this in the base class
 namespace materials {
+
 auto Gas = G4NistManager::Instance() -> FindOrBuildMaterial("G4_Ar");
 auto Vacuum = G4NistManager::Instance() -> FindOrBuildMaterial("G4_Galactic");
 auto Copper = G4NistManager::Instance() -> FindOrBuildMaterial("G4_Cu");

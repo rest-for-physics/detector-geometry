@@ -18,40 +18,23 @@
 #include <vector>
 
 #include "BabyIaxoGeometry.h"
+#include "OpticalTest.h"
 
 using namespace std;
 
-/*
- * // May be useful to do simple test in simulation or to use the Geant4 viewer
-class DetectorConstruction : public G4VUserDetectorConstruction {
-   public:
-    inline DetectorConstruction() : G4VUserDetectorConstruction() {}
-
-    virtual G4VPhysicalVolume* Construct() {
-        auto world = BaseGeometry::GetWorld();
-        return world;
-    }
-};
-
-class ActionInitialization : public G4VUserActionInitialization {
-   public:
-    ActionInitialization() = default;
-
-    virtual void BuildForMaster() const {}
-    virtual void Build() const {}
-};
-*/
-
 int main(int argc, char** argv) {
-    BabyIAXOGeometry::Initialize();
-    const bool overlaps = BabyIAXOGeometry::CheckOverlaps();
+    typedef OpticalTest Geometry;
+
+    Geometry::Initialize();
+    const bool overlaps = Geometry::CheckOverlaps();
     if (overlaps) {
         cout << "OVERLAPS!" << endl;
         return 1;
     }
     const string filename = "geometry.gdml";
-    BabyIAXOGeometry::WriteGDML(filename);
+    Geometry::WriteGDML(filename);
 
+    // return;
     auto geoManager = new TGeoManager();
     TGeoManager::Import(filename.c_str());
     geoManager->CheckOverlaps(0.0001, "d");
