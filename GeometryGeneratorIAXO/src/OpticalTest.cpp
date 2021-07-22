@@ -23,7 +23,7 @@
 using namespace std;
 
 void OpticalTest::Initialize() {
-    double worldSize = 1 * m;
+    double worldSize = 2 * m;
 
     auto solidWorld = new G4Box("World", 0.5 * worldSize, 0.5 * worldSize, 0.5 * worldSize);
     auto logicWorld = new G4LogicalVolume(solidWorld, G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic"), solidWorld->GetName());
