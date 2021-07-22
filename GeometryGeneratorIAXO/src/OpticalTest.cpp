@@ -39,10 +39,10 @@ void OpticalTest::Initialize() {
                                fCheckOverlaps);        // overlaps checking
 
     //
-    OpNovice();
+    Scintillator();
 }
 
-void OpticalTest::OpNovice() {
+void OpticalTest::Scintillator() {
     // Adapted from https://github.com/Geant4/geant4/blob/master/examples/extended/optical/OpNovice/src/OpNoviceDetectorConstruction.cc
     auto hydrogen = G4NistManager::Instance()->FindOrBuildElement(1);  // Z = 1 = Hydrogen
     auto carbon = G4NistManager::Instance()->FindOrBuildElement(6);    // Z = 6 = Carbon
@@ -53,11 +53,14 @@ void OpticalTest::OpNovice() {
     scintillatorMaterial->AddElement(carbon, 0.915000);
 
     double scintillatorLength = 800 * mm;
-    double lightGuideLength = 50 * mm;
+    double scintillatorWidth = 200 * mm;
+    double scintillatorThickness = 50 * mm;
+    double lightGuide1Length = 130.0 * mm;
+    double lightGuide2Length = 80.0 * mm;
 
     auto scintillatorMaterialPropertiesTable = new G4MaterialPropertiesTable();
 
-    std::vector<G4double> photonEnergy = {2.95200 * eV};
+    vector<double> photonEnergy = {2.95200 * eV};
 
     auto buildVector = [photonEnergy](double value) {
         vector<double> result;
@@ -65,9 +68,9 @@ void OpticalTest::OpNovice() {
         return result;
     };
 
-    std::vector<G4double> scintillation = buildVector(1);
-    std::vector<G4double> refractiveIndexScintillator = buildVector(1.54);
-    std::vector<G4double> absorptionLength = buildVector(210.0 * cm);
+    vector<double> scintillation = buildVector(1);
+    vector<double> refractiveIndexScintillator = buildVector(1.54);
+    vector<double> absorptionLength = buildVector(210.0 * cm);
 
     scintillatorMaterialPropertiesTable->AddProperty("SCINTILLATIONCOMPONENT1", photonEnergy, scintillation);
     scintillatorMaterialPropertiesTable->AddProperty("RINDEX", photonEnergy, refractiveIndexScintillator);
@@ -81,14 +84,20 @@ void OpticalTest::OpNovice() {
 
     // scintillatorMaterial->GetIonisation()->SetBirksConstant(0.110 * mm / MeV); // TODO: WHAT DOES THIS DO?
 
-    auto solidScintillator = new G4Box("Scintillator", 200 * mm / 2, 50 * mm / 2, scintillatorLength / 2);
+    auto solidScintillator = new G4Box("Scintillator", scintillatorWidth / 2, scintillatorThickness / 2, scintillatorLength / 2);
     auto LogicScintillator = new G4LogicalVolume(solidScintillator, scintillatorMaterial, solidScintillator->GetName());
     new G4PVPlacement(nullptr, G4ThreeVector(), LogicScintillator->GetName(), LogicScintillator, fWorld, false, 0);
 
     G4Material* lightGuideMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_LUCITE");
-    auto solidLightGuide = new G4Box("LightGuide", 200 * mm / 2, 50 * mm / 2, lightGuideLength / 2);
+
+    auto solidLightGuide1 = new G4Trd("LightGuide1", scintillatorWidth / 2, scintillatorWidth / 2, scintillatorThickness / 2,
+                                      scintillatorThickness / 2 + 5, lightGuide1Length / 2);
+    auto solidLightGuide2 = new G4Trd("LightGuide2", scintillatorWidth / 2, 70.0 / 2, scintillatorThickness / 2 + 5, 70.0 / 2, lightGuide2Length / 2);
+
+    auto solidLightGuide = new G4UnionSolid("LightGuide", solidLightGuide1, solidLightGuide2, nullptr,
+                                            G4ThreeVector(0, 0, lightGuide1Length / 2 + lightGuide2Length / 2));
     auto logicLightGuide = new G4LogicalVolume(solidLightGuide, lightGuideMaterial, solidLightGuide->GetName());
-    new G4PVPlacement(nullptr, G4ThreeVector(0, 0, scintillatorLength / 2 + lightGuideLength / 2), logicLightGuide->GetName(), logicLightGuide,
+    new G4PVPlacement(nullptr, G4ThreeVector(0, 0, scintillatorLength / 2 + lightGuide1Length / 2), logicLightGuide->GetName(), logicLightGuide,
                       fWorld, false, 0);
 
     auto airPropertiesTable = new G4MaterialPropertiesTable();

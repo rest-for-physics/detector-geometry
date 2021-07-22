@@ -9,7 +9,7 @@ class OpticalTest : public BaseGeometry {
     static void Initialize();
 
    private:
-    static void OpNovice();
+    static void Scintillator();
 };
 
 #endif  // GEOMETRY_GENERATOR_IAXO_OPTICALTEST_H
