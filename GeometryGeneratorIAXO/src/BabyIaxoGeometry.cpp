@@ -40,6 +40,9 @@ namespace chamber {
 double Height(30.0 * mm), Diameter(102.0 * mm), BackplateThickness(15.0 * mm), SquareSide(134.0 * mm), TeflonWallThickness(1.0 * mm);
 // Readout
 double ReadoutKaptonThickness(0.5 * mm), ReadoutCopperThickness(0.2 * mm), ReadoutPlaneSide(60.0 * mm);
+// Drift Field
+double DriftFieldRingsHeight(10.0 * mm), DriftFieldRingsThickness(0.2 * mm), DriftFieldRimThickness(ReadoutCopperThickness),
+    DriftFieldRingsGap(5 * mm), DriftFieldRingsThicknessPositionZ(-DriftFieldRingsGap / 2 - DriftFieldRingsHeight / 2);
 // Cathode
 double CathodeTeflonDiskHoleRadius(15.0 * mm), CathodeTeflonDiskThickness(5.0 * mm), CathodeCopperSupportOuterRadius(45.0 * mm),
     CathodeCopperSupportInnerRadius(8.5 * mm), CathodeCopperSupportThickness(1.0 * mm), CathodeWindowThickness(0.004 * mm),
@@ -95,7 +98,7 @@ void BabyIAXOGeometry::Initialize() {
     fWorld = physicalWorld;
 
     PlaceChamber();
-    PlaceShielding();
+    // PlaceShielding();
     PlacePipe();
 }
 
@@ -112,17 +115,33 @@ void BabyIAXOGeometry::PlaceChamber() {
     // Chamber backplate
     auto solidChamberBackplate = new G4Box("ChamberBackplate", chamber::SquareSide / 2, chamber::SquareSide / 2, chamber::BackplateThickness / 2);
     auto logicChamberBackplate = new G4LogicalVolume(solidChamberBackplate, materials::Copper, solidChamberBackplate->GetName());
-    // Chamber teflon inner wall
-    auto solidChamberTeflonWall = new G4Tubs("ChamberTeflonWall", chamber::Diameter / 2 - chamber::TeflonWallThickness, chamber::Diameter / 2,
-                                             chamber::Height / 2, 0, 2 * M_PI);
-    auto logicChamberTeflonWall = new G4LogicalVolume(solidChamberTeflonWall, materials::PTFE, solidChamberTeflonWall->GetName());
-    // Chamber kapton readout
-    auto solidKaptonReadout = new G4Box("KaptonReadout", chamber::SquareSide / 2, chamber::SquareSide / 2, chamber::ReadoutKaptonThickness / 2);
-    auto logicKaptonReadout = new G4LogicalVolume(solidKaptonReadout, materials::Kapton, solidKaptonReadout->GetName());
     // Chamber copper readout
     auto solidCopperReadout =
         new G4Box("CopperReadout", chamber::ReadoutPlaneSide / 2, chamber::ReadoutPlaneSide / 2, chamber::ReadoutCopperThickness / 2);
     auto logicCopperReadout = new G4LogicalVolume(solidCopperReadout, materials::Copper, solidCopperReadout->GetName());
+    // Drift Field components
+    auto solidDriftFieldRings1 =
+        new G4Tubs("solidDriftFieldRings1", chamber::Diameter / 2 - chamber::TeflonWallThickness / 2 - chamber::DriftFieldRingsThickness / 2,
+                   chamber::Diameter / 2 - chamber::TeflonWallThickness / 2 + chamber::DriftFieldRingsThickness / 2,
+                   chamber::DriftFieldRingsHeight / 2, 0, 2 * M_PI);
+    auto solidDriftFieldRings = new G4UnionSolid("solidDriftFieldRings", solidDriftFieldRings1, solidDriftFieldRings1, nullptr,
+                                                 G4ThreeVector(0, 0, chamber::DriftFieldRingsHeight + chamber::DriftFieldRingsGap));
+    auto logicDriftFieldRings = new G4LogicalVolume(solidDriftFieldRings, materials::Copper, solidDriftFieldRings->GetName());
+
+    auto solidDriftFieldRimAux = new G4Tubs("solidDriftFieldRimAux", 0, chamber::Diameter / 2 - chamber::TeflonWallThickness,
+                                            chamber::DriftFieldRimThickness / 2, 0, 2 * M_PI);
+    auto solidDriftFieldRim =
+        new G4SubtractionSolid("solidDriftFieldRim", solidDriftFieldRimAux, solidCopperReadout, rotation45degZ, G4ThreeVector());
+    auto logicDriftFieldRim = new G4LogicalVolume(solidDriftFieldRim, materials::Copper, solidDriftFieldRim->GetName());
+    // Chamber teflon inner wall
+    auto solidChamberTeflonWallAux = new G4Tubs("ChamberTeflonWallAux", chamber::Diameter / 2 - chamber::TeflonWallThickness, chamber::Diameter / 2,
+                                                chamber::Height / 2, 0, 2 * M_PI);
+    auto solidChamberTeflonWall = new G4SubtractionSolid("solidChamberTeflonWall", solidChamberTeflonWallAux, solidDriftFieldRings, nullptr,
+                                                         G4ThreeVector(0, 0, chamber::DriftFieldRingsThicknessPositionZ));
+    auto logicChamberTeflonWall = new G4LogicalVolume(solidChamberTeflonWall, materials::PTFE, solidChamberTeflonWall->GetName());
+    // Chamber kapton readout
+    auto solidKaptonReadout = new G4Box("KaptonReadout", chamber::SquareSide / 2, chamber::SquareSide / 2, chamber::ReadoutKaptonThickness / 2);
+    auto logicKaptonReadout = new G4LogicalVolume(solidKaptonReadout, materials::Kapton, solidKaptonReadout->GetName());
     // Chamber cathode support
     auto solidCathodeTeflonDiskBase = new G4Tubs("CathodeTeflonDiskBase", chamber::CathodeTeflonDiskHoleRadius, chamber::SquareSide / 2,
                                                  chamber::CathodeTeflonDiskThickness / 2, 0, 2 * M_PI);
@@ -161,9 +180,11 @@ void BabyIAXOGeometry::PlaceChamber() {
     // Chamber gas
     auto solidGasBase = new G4Tubs("GasBase", 0, chamber::Diameter / 2 - chamber::TeflonWallThickness, chamber::Height / 2, 0, 2 * M_PI);
 
-    auto solidGasSubtraction = new G4SubtractionSolid("GasSubtraction", solidGasBase, solidCopperReadout, rotation45degZ,
-                                                      G4ThreeVector(0, 0, -chamber::Height / 2 + chamber::ReadoutCopperThickness / 2));
-    auto solidGas = new G4SubtractionSolid("Gas", solidGasSubtraction, solidCathodeWindow, nullptr,
+    auto solidGasSubtraction1 = new G4SubtractionSolid("GasSubtraction1", solidGasBase, solidCopperReadout, rotation45degZ,
+                                                       G4ThreeVector(0, 0, -chamber::Height / 2 + chamber::ReadoutCopperThickness / 2));
+    auto solidGasSubtraction2 = new G4SubtractionSolid("GasSubtraction2", solidGasSubtraction1, solidCopperReadout, rotation45degZ,
+                                                       G4ThreeVector(0, 0, -chamber::Height / 2 + chamber::DriftFieldRimThickness / 2));
+    auto solidGas = new G4SubtractionSolid("Gas", solidGasSubtraction2, solidCathodeWindow, nullptr,
                                            G4ThreeVector(0, 0, chamber::Height / 2 - chamber::CathodeWindowThickness / 2));
     auto logicGas = new G4LogicalVolume(solidGas, materials::Gas, solidGas->GetName());
     // Chamber placement
@@ -172,6 +193,10 @@ void BabyIAXOGeometry::PlaceChamber() {
     new G4PVPlacement(nullptr, G4ThreeVector(0, 0, -chamber::Height / 2 - chamber::ReadoutKaptonThickness - chamber::BackplateThickness / 2),
                       logicChamberBackplate->GetName(), logicChamberBackplate, fWorld, false, 0);
     new G4PVPlacement(nullptr, G4ThreeVector(), logicChamberTeflonWall->GetName(), logicChamberTeflonWall, fWorld, false, 0);
+    new G4PVPlacement(nullptr, G4ThreeVector(0, 0, chamber::DriftFieldRingsThicknessPositionZ), logicDriftFieldRings->GetName(), logicDriftFieldRings,
+                      fWorld, false, 0);
+    new G4PVPlacement(nullptr, G4ThreeVector(0, 0, -chamber::Height / 2 + chamber::DriftFieldRimThickness / 2), logicDriftFieldRim->GetName(),
+                      logicDriftFieldRim, fWorld, false, 0);
     new G4PVPlacement(nullptr, G4ThreeVector(0, 0, -chamber::Height / 2 - chamber::ReadoutKaptonThickness / 2), logicKaptonReadout->GetName(),
                       logicKaptonReadout, fWorld, false, 0);
     new G4PVPlacement(rotation45degZ, G4ThreeVector(0, 0, -chamber::Height / 2 + chamber::ReadoutCopperThickness / 2), logicCopperReadout->GetName(),

@@ -23,7 +23,7 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-    typedef OpticalTest Geometry;
+    typedef BabyIAXOGeometry Geometry;
 
     Geometry::Initialize();
     const bool overlaps = Geometry::CheckOverlaps();
