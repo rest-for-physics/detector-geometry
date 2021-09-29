@@ -1,4 +1,9 @@
-*.gdml_
-*.root
-!*.gdml.root
 .vscode
+.idea
+
+*.gdml_
+*.gdml
+*.root
+
+gdml/*
+!gdml/*.gdml
