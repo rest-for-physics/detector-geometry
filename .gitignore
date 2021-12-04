@@ -1,4 +1,12 @@
-*.gdml_
-*.root
-!*.gdml.root
 .vscode
+.idea
+*.iml
+
+*.gdml_
+*.gdml
+*.root
+
+!root/*.C
+
+!gdml/BabyIAXO/*.gdml
+!gdml/IAXO-D1/*.gdml
