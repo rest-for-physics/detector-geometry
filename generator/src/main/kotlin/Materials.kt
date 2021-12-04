@@ -19,7 +19,7 @@ fun resolveMaterialByRef(material: Materials): GdmlMaterial {
 
 enum class Materials(val ref: GdmlRef<GdmlMaterial>) {
     Air(resolve("G4_AIR")),
-    Gas(resolve("G4_Ar")),
+    Gas(resolve("GasMixture-Argon2%Isobutane1.4Bar")),
     Vacuum(resolve("G4_Galactic")),
     Copper(resolve("G4_Cu")),
     Teflon(resolve("G4_TEFLON")),
