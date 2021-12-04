@@ -10,11 +10,13 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    // mavenLocal()
 }
 
 dependencies {
     testImplementation(kotlin("test"))
     implementation("space.kscience:gdml:0.4.0")
+    // implementation("local:gdml-jvm:0.4.0-dev") // this has to match the local published version
 }
 
 tasks.test {
