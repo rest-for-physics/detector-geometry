@@ -18,6 +18,7 @@ jobs:
       - name: Run geometry generator
         working-directory: ${{github.workspace}}/generator
         run: |
+          chmod +x gradlew
           ./gradlew run
 
       - name: List geometry files
