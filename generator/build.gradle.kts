@@ -15,8 +15,14 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-    implementation("space.kscience:gdml:0.4.0")
+    // implementation("space.kscience:gdml:0.4.0")
     // implementation("local:gdml-jvm:0.4.0-dev") // this has to match the local published version
+
+    implementation("space.kscience:gdml") {
+        version {
+            branch = "dev"
+        }
+    }
 }
 
 tasks.test {
