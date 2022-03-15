@@ -12,11 +12,11 @@ In order to visualize a gdml file with root one can do the following (for a file
 
 ```
 TGeoManager::Import("Setup.gdml");
+gGeoManager->SetVisLevel(10);
 gGeoManager->GetTopVolume()->Draw("ogl");
 ```
 
-
-Note: if the getGeometry contains many nested layers, you need to disable ROOT's [automatic visible depth](https://github.com/mipt-npm/gdml.kt/issues/30) to correctly visualize the getGeometry.
+The `SetVisLevel` command is required to view some geometries that have nested assemblies, such as the veto system (veto < veto layer < veto group < veto system). ROOT's default value is too low.
 
 Additionally, the macro file `ViewGdml.C` from the `root` directory can be used to visualize the gdml. To use this macro to visualize some file named `Setup.gdml` one could do the following from a shell that has access to the `root` command (not from the root prompt itself!):
 
