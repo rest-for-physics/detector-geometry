@@ -35,3 +35,11 @@ Running the generator from the command line is ready easy, just go to the `gener
 ```
 
 (you may need to give the script permission to run via `chmod +x gradlew`).
+
+### Showcase
+
+![image](https://user-images.githubusercontent.com/35803280/158363274-5b60f45a-3c72-430a-bec7-19b0b18e42a9.png)
+
+Since the geometry is divided into groups, we can use the tree view to easily navigate the geometry.
+
+![image](https://user-images.githubusercontent.com/35803280/158363294-0a850d7a-1d6c-4949-a195-0d91de79bc8e.png)
