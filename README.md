@@ -23,3 +23,15 @@ Additionally, the macro file `ViewGdml.C` from the `root` directory can be used 
 ```
 root 'ViewGdml.C("Setup.gdml")'
 ```
+
+### Generation
+
+The `generator` section of this repository is used to produce the gdml files. The files present in the repository should already be updated to the latest version of the generator, but you can still tweak the generator code to produce variations in the geometry more easily than to modify the GDML.
+
+Running the generator from the command line is ready easy, just go to the `generator` directory and type:
+
+```
+./gradlew run
+```
+
+(you may need to give the script permission to run via `chmod +x gradlew`).
