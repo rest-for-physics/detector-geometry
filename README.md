@@ -34,7 +34,7 @@ Running the generator from the command line is really easy, just go to the `gene
 ./gradlew run
 ```
 
-you may need to give the script permission to run via `chmod +x gradlew`.
+You may need to give the script permission to run via `chmod +x gradlew`.
 
 ### Showcase
 
